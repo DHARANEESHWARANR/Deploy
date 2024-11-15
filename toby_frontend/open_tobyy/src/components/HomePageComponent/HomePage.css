@@ -1,0 +1,136 @@
+#header_1{
+    font-size: 30px;
+    font-family: sans-serif;
+    color: rgb(236, 68, 96);  
+    margin-top: 45px;
+    margin-left: -30px;
+}
+
+#header_2{
+    font-size: 16px;
+    color: #70708c;
+    margin-left: -20px;
+}
+.signup_page_left_side{
+    display: flex;
+    margin-left: 20%;
+}
+.signup_page_right_side{
+    width: 45%;
+    text-align: center;
+}
+.flex_for_names{
+    display: flex;
+}
+.first_name{
+   margin-left: 20px;
+}
+.first_name input {
+    width: 200px;
+    height: 22px;
+    margin-left: 30px;
+  }
+.last_name input{
+    width: 200px;
+    height: 22px;
+    margin-left: 8px;
+}
+.email input,.password input {
+    width: 300px;
+    height: 22px;
+    margin-right:140px;
+}
+.formforhome{
+    margin-top: 50px;
+}
+.google_button{
+    width: 400px;
+    height: 30px;
+    font-size: 14px;
+    color: #474759;
+    margin-top: 25px;
+}
+
+.first_name input,.last_name input, .email input , .password input{
+    background-color: white;
+    border: 2px solid rgb(219, 203, 203);
+    border-radius: 3px;
+}
+
+.fn_class{
+  padding-right: 100px;
+}
+.ln_class{
+    padding-right: 120px;
+}
+
+.e_class{
+       padding-right: 415px;
+}
+.p_class{
+     padding-right: 385px;
+}
+
+
+.google_button{
+    display: flex;
+    margin-left: 10%;
+    padding: 2%;
+}
+
+.google_button img{
+    width: 20px;
+    height: 20px;
+    margin-right: 30%;
+    margin-top: 1%;
+    margin-left: -25px;
+
+}
+
+.google_button_text{
+    background: transparent;
+    width: 800px;
+    background-color: white;
+    border: 2px solid rgb(219, 203, 203);
+    margin-left: -100px;
+    color: rgb(206, 197, 197);
+}
+
+
+.get_started_button{
+    background-color: rgb(221, 58, 85);
+    color: white;
+    font-size: 15px;
+    margin-top: 20px;
+    font-weight: 150;
+    width: 450px;
+    border-radius: 2px;
+    height: 30px;
+}
+.footer-content{
+    font-size: 10px;
+    color: #474759;
+}
+
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #ccc;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #ccc;
+}
+
+.divider:not(:empty)::before {
+    margin-right: 10px;
+}
+
+.divider:not(:empty)::after {
+    margin-left: 10px;
+}

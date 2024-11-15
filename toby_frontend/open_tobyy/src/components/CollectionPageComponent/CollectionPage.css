@@ -1,0 +1,65 @@
+.collection-list {
+    list-style-type: none;
+    padding: 0; 
+    margin: 0; 
+  }
+  
+.collection-item {
+    margin-bottom: 10px; 
+  }
+  
+.collection-item-h3{
+    color: black;
+    font-size: 25px;
+}
+
+/* Container for the tabs */
+.collection-tabs-container {
+    padding: 20px;
+    background-color: #f4f4f4;  /* Light gray background */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+  }
+  
+  /* Styling the list of tabs */
+  .collection-tabs {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  
+  /* Styling each tab item */
+  .collection-tab-item {
+    margin: 10px;
+    padding: 5px 15px;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  /* Hover effect on each tab item */
+  .collection-tab-item:hover {
+    transform: translateY(-3px);  /* Elevates the tab on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Styling the link inside each tab item */
+  .collection-tab-link {
+    text-decoration: none;
+    color: #0073e6;  /* Blue color for links */
+    font-weight: bold;
+    font-size: 16px;
+    display: block;
+    text-align: center;
+  }
+  
+  /* Hover effect on the link */
+  .collection-tab-link:hover {
+    color: #005bb5;  /* Darker blue color on hover */
+  }
+  
