@@ -51,6 +51,7 @@ function refreshTabDetails() {
   });
 }
 
+
 // Initial storage of all open tabs when extension loads
 chrome.runtime.onInstalled.addListener(() => {
   collectAndStoreTabs();
@@ -102,3 +103,43 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       return true;  // Keeps the message channel open for asynchronous response
   }
 });
+
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  console.log(message);
+  if (message === "remove_tabs_except_current_one") {
+    console.log("Hello bhaiya");
+    chrome.tabs.query({}, (tabs) => {
+      console.log(tabs);
+      chrome.tabs.query({ active: true, currentWindow: true }, (activeTabs) => {
+        console.log(activeTabs)
+        const activeTabId = activeTabs[0].id;
+
+        // Close all tabs except the active one
+        tabs.forEach((tab) => {
+          if (tab.id !== activeTabId) {
+            chrome.tabs.remove(tab.id);
+          }
+        });
+      });
+    });
+  }
+});
+
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  console.log("Received message:", message);
+  
+  if (message.action === "OPEN_ALL_TABS" && Array.isArray(message.urls)) {
+    console.log("Opening all tabs with URLs:", message.urls);
+  
+    message.urls.forEach((url) => {
+      if (url) {
+        chrome.tabs.create({ url });
+      }
+    });
+    
+    sendResponse({ status: "success", message: "Tabs opened successfully." });
+  }
+});
+

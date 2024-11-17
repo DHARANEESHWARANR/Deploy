@@ -29,9 +29,12 @@ const CollectionTabs = ({collection_id}) =>{
         <div className="collection-tabs-container">
             <ul className="collection-tabs">
                    {allTabs.map((tab) => (
-                    <li key={tab.id} className="collection-tab-item">
-                       <a href={tab.url} className="collection-tab-link">{tab.title}</a>
-                    </li>
+                    <li key={tab.id} className="tab-item">
+                    <img src={tab.favicon_url} alt={`${tab.title} icon`} />
+                    <a href={tab.url} target="_blank" rel="noopener noreferrer">
+                      {tab.title}
+                    </a>
+                  </li>
                  ))}
            </ul>
         </div>

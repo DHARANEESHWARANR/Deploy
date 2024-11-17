@@ -1,5 +1,7 @@
 class Api::V1::CollectionsController < ApplicationController
   def create
+    puts "-----------------"
+    puts collection_params;
     collection = Collection.new(collection_params)
     collection.user_id = params[:collection][:user_id]
     if collection.save
@@ -25,7 +27,7 @@ class Api::V1::CollectionsController < ApplicationController
       current_collection.title = params[:collection][:title]
       current_collection.description = params[:collection][:description]
       if current_collection.save
-        render json: { message: "Collection updated successfully", collection: Collection.all }, status: :ok
+        render json: { message: "Collection updated successfully", collection: current_collection }, status: :ok
       else
         render json: { message: "Failed to update collection", errors: current_collection.errors.full_messages }, status: :unprocessable_entity
       end
@@ -47,6 +49,6 @@ class Api::V1::CollectionsController < ApplicationController
   private
   
   def collection_params
-    params.require(:collection).permit(:title, :description, :user_id)
+    params.require(:collection).permit(:title, :description, :user_id, bookmarks_attributes: [:title, :url, :description,:favicon_url])
   end
 end

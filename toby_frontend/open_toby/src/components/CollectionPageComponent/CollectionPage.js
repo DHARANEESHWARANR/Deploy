@@ -1,12 +1,13 @@
 // CollectionsPage.js
 import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import CollectionList from './CollectionList';
-
+import { CollectionsContext } from '../../contexts/CollectionsContext';
 const CollectionsPage = ({userData}) => {
     const user = userData.user;
     const user_id = user.id;
-    const [collections,setCollections] = useState([]);
+    // const [collections,setCollections] = useState([]);
+    const {collections,setCollections} = useContext(CollectionsContext);
     useEffect(()=>{
         console.log("useeffect triggered");
         const fetchCollections = async() =>{
@@ -29,7 +30,7 @@ const CollectionsPage = ({userData}) => {
     },[user_id]);
     return(
     <div>
-        <CollectionList collections={collections}/>
+        <CollectionList collections={collections} setCollections={setCollections} userData={userData} />
     </div>
     );
 };

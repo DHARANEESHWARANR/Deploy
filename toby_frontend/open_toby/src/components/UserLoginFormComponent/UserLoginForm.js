@@ -1,8 +1,9 @@
 import axios from 'axios';
-import React,{useState} from 'react'
+import React,{useContext, useEffect, useState} from 'react'
 import { useNavigate } from 'react-router-dom';
-
+import { UserContext } from '../../contexts/UsersContext';
 const UserLoginForm = () =>{
+    const {usersData,setUsersData} = useContext(UserContext);
     const [formData,setFormData] = useState({
         email:'',
         password:''
@@ -20,7 +21,12 @@ const UserLoginForm = () =>{
             email: formData.email,
             password: formData.password
           });
-          console.log(response);
+          console.log("=============================================================");
+          console.log(response.data.user);
+          // setUsersData(response.data.user.id);
+          console.log(response.data.user.id);
+          setUsersData(response.data.user.id);
+          console.log(usersData);
           navigate('/user_profile', { state: { userData: response.data } });
         } catch(error) {
           if(error.response) {
@@ -31,6 +37,10 @@ const UserLoginForm = () =>{
           }
         }
       };
+      useEffect(()=>{
+        console.log("THIS IS USEEFFECT:")
+        console.log(usersData);
+      },[usersData]);
 
     return (
         <>

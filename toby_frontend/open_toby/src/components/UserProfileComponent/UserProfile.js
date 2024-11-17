@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import './UserProfile.css' 
 import CollectionsPage from '../CollectionPageComponent/CollectionPage';
 import TabList from '../TabListComponent/TabList';
-
+ 
 const UserProfile = () => {
   const location = useLocation();
   const { userData } = location.state || {}; // Access userData

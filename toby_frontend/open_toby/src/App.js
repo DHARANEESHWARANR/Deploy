@@ -4,10 +4,13 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import HomePage from './components/HomePageComponent/HomePage';
 import UserProfile from './components/UserProfileComponent/UserProfile';
 import UserLoginForm from './components/UserLoginFormComponent/UserLoginForm';
-
+import { UserProvider } from './contexts/UsersContext';
+import { CollectionsProvider } from './contexts/CollectionsContext';
 function App() {
   return (
     <GoogleOAuthProvider clientId="303825068922-0i5n5e3p1i1ecto6brf792tpkchjtnei.apps.googleusercontent.com">
+      <UserProvider>
+      <CollectionsProvider>
       <Router
         future={{
           v7_startTransition: true,
@@ -20,6 +23,8 @@ function App() {
           <Route path="/login" element={<UserLoginForm/>} />
         </Routes>
       </Router>
+      </CollectionsProvider>
+      </UserProvider>
     </GoogleOAuthProvider>
   );
 }

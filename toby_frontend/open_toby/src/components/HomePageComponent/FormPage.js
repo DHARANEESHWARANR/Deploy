@@ -1,8 +1,9 @@
 import axios from 'axios';
-import React,{useState} from 'react'
+import React,{useContext, useState} from 'react'
 import { useNavigate } from 'react-router-dom';
-
+import { UserContext } from '../../contexts/UsersContext';
 const FormPage = () =>{
+    const {usersData,setUsersData} = useContext(UserContext);
     const [formData,setFormData] = useState({
         first_name:'',
         last_name:'',
@@ -22,7 +23,9 @@ const FormPage = () =>{
                 user: formData
              })
            console.log("This is the response from the backend")  
-           console.log(response)
+           console.log(response.data)
+           setUsersData(response.data.user.id);
+           console.log("This is the usersData id from the context",usersData);
            navigate('/user_profile',{state: {userData: response.data}})
         }
         catch(error){ 
