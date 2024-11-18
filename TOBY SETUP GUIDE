@@ -14,47 +14,34 @@ Project Toby is a powerful web-based solution designed to streamline your browsi
 Ensure you have the following installed on your system:
 
 Software	Minimum Version	Link to Download
-Node.js	v14 or later	Download Node.js
-Rails	v6 or later	Rails Guide
-Ruby	v2.7 or later	Install Ruby
+      Node.js	v14 or later	Download Node.js
+      Rails	v6 or later	Rails Guide
+      Ruby	v2.7 or later	Install Ruby
 Chrome Browser	Latest version	Get Chrome
 Steps to Run the Project
 ⚙️ **1. Backend Setup**
 Navigate to the backend folder:
 bash
 Copy code
-cd TOBY_BACKEND/toby
-Install required gems:
-bash
-Copy code
-bundle install
-Start the Rails server on port 3001:
-bash
-Copy code
-rails server -p 3001
+    cd TOBY_BACKEND/toby
+    bundle install
+    rails server -p 3001
+
+
 🌐 **2. Frontend Setup**
 Navigate to the frontend folder:
-bash
 Copy code
-cd TOBY_FRONTEND/open_toby
-Install dependencies:
-bash
-Copy code
-npm install
-Start the React development server:
-bash
-Copy code
-npm start
+      cd TOBY_FRONTEND/open_toby
+      npm install
+       npm start
 🔌 3. Chrome Extension Setup
 Locate the extension folder within the frontend directory:
-bash
-Copy code
-TOBY_FRONTEND/extension
-Open Chrome and navigate to chrome://extensions.
-Enable Developer Mode (toggle in the top-right corner).
-Click on "Load unpacked" and select the extension folder.
+      TOBY_FRONTEND/extension
+         Open Chrome and navigate to chrome://extensions.
+         Enable Developer Mode (toggle in the top-right corner).
+         Click on "Load unpacked" and select the extension folder.
 
 🌐 Accessing the Application
-Frontend: Open http://localhost:3000 in your browser.
-Backend API: Accessible at http://localhost:3001.
+    Frontend: Open http://localhost:3000 in your browser.
+    Backend API: Accessible at http://localhost:3001.
 Chrome Extension: Visible in your browser’s extensions toolbar after setup.
