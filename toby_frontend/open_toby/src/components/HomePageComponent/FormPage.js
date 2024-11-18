@@ -25,6 +25,7 @@ const FormPage = () =>{
            console.log("This is the response from the backend")  
            console.log(response.data)
            setUsersData(response.data.user.id);
+           localStorage.setItem('user_id',response.data.user.id);
            console.log("This is the usersData id from the context",usersData);
            navigate('/user_profile',{state: {userData: response.data}})
         }

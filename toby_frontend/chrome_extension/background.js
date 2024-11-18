@@ -6,12 +6,10 @@ function collectAndStoreTabs(excludeTabId = null) {
           .filter((tab) => tab.id !== excludeTabId  && tab.title !== "React App" && tab.title !== "Extensions" && tab.title !=="New Tab")  // Exclude specified tab
           .map((tab) => ({
               id: tab.id,
-              url: tab.url || null,  // Fallback to null if undefined
+              url: tab.url || null, 
               title: tab.title || null,
               favicon_url: tab.favIconUrl || null              
           }));
-
-      // Store the tab details in Chrome local storage
       chrome.storage.local.set({ openTabs: tabInfo }, () => {
           if (chrome.runtime.lastError) {
               console.error("Error saving tab details:", chrome.runtime.lastError);
@@ -55,25 +53,21 @@ function refreshTabDetails() {
 // Initial storage of all open tabs when extension loads
 chrome.runtime.onInstalled.addListener(() => {
   collectAndStoreTabs();
-  // Retry fetching tab details after a short delay
-  setTimeout(refreshTabDetails, 1000);  // Adjust delay if needed
+  
+  setTimeout(refreshTabDetails, 1000);  
 });
 
 // Listen for new tab creation and update storage
 chrome.tabs.onCreated.addListener((tab) => {
-  collectAndStoreTabs(tab.id);  // Store all tabs except the new one
+  collectAndStoreTabs(tab.id);  
 });
 
 // Listen for tab removal and update storage
 chrome.tabs.onRemoved.addListener((removedTabId) => {
-  // Retrieve the current list of stored tabs
+  
   chrome.storage.local.get("openTabs", (data) => {
       const openTabs = data.openTabs || [];
-
-      // Filter out the removed tab
       const updatedTabInfo = openTabs.filter((tab) => tab.id !== removedTabId);
-
-      // Update the local storage with the new list of tabs
       chrome.storage.local.set({ openTabs: updatedTabInfo }, () => {
           if (chrome.runtime.lastError) {
               console.error("Error updating tab details on removal:", chrome.runtime.lastError);
@@ -95,12 +89,10 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log("List-----------------------------------");
   if (message === "getTabs") {
-      // Access data from chrome.storage.local
       chrome.storage.local.get("openTabs", (data) => {
-          // Send response back to content script
           sendResponse({ tabs: data.openTabs });
       });
-      return true;  // Keeps the message channel open for asynchronous response
+      return true; 
   }
 });
 
@@ -114,8 +106,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       chrome.tabs.query({ active: true, currentWindow: true }, (activeTabs) => {
         console.log(activeTabs)
         const activeTabId = activeTabs[0].id;
-
-        // Close all tabs except the active one
         tabs.forEach((tab) => {
           if (tab.id !== activeTabId) {
             chrome.tabs.remove(tab.id);

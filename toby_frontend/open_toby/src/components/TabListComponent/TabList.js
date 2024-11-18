@@ -5,6 +5,7 @@ import { UserContext } from "../../contexts/UsersContext";
 import axios from "axios";
 function MyComponent() {
   const {usersData,setUsersData} = useContext(UserContext);
+  const user_id = parseInt(localStorage.getItem('user_id'),10);
   const [storedData, setStoredData] = useState([]);
   const {collections,setCollections} = useContext(CollectionsContext);
   useEffect(() => {
@@ -15,19 +16,16 @@ function MyComponent() {
       }
     };
 
-    // Attach listener
     window.addEventListener("message", handleMessage);
-
-    // Initial request to fetch storage data
     window.postMessage({ type: "GET_STORAGE" }, "*");
 
-    // Cleanup event listener on unmount
+
     return () => {
       window.removeEventListener("message", handleMessage);
     };
   }, []);
   const handleClickOfSaveSession = async() =>{
-    console.log(storedData);
+    console.log(user_id);
     const now = new Date();
     const options = { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
     const formattedTitle = now.toLocaleString('en-US', options);
@@ -35,7 +33,7 @@ function MyComponent() {
       collection: {
         title: formattedTitle,
         description: "Description of the session",
-        user_id: usersData,
+        user_id: user_id,
         bookmarks_attributes: storedData.map((tab) => ({
           title: tab.title,
           url: tab.url,
@@ -44,7 +42,6 @@ function MyComponent() {
       },
     };
    console.log(payload);
-   setStoredData([]);
     try{
       const response = await axios.post('http://localhost:3001/api/v1/collections', payload);
       console.log("The Collection with the bulk is created");
@@ -53,6 +50,10 @@ function MyComponent() {
         setCollections((prev_collections)=>[new_collection,...prev_collections]);
         console.log("The updated collection is :",collections);
         window.postMessage({type: "REMOVE_OTHER_TABS"},"*");
+        setTimeout(()=>{
+          setStoredData([]);
+          console.log("The store data is now emty");
+        },2000);
       }
     }
     catch(error){
@@ -62,7 +63,6 @@ function MyComponent() {
 
   return (
     <div>
-  <h1>Stored Data</h1>
   <button onClick={handleClickOfSaveSession}>Save Session</button>
   <ul>
     {storedData.map((tab) => (

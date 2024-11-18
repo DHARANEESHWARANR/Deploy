@@ -27,6 +27,8 @@ const UserLoginForm = () =>{
           console.log(response.data.user.id);
           setUsersData(response.data.user.id);
           console.log(usersData);
+          localStorage.setItem('user_id',response.data.user.id);
+          localStorage.setItem('user_name',response.data.user.first_name);
           navigate('/user_profile', { state: { userData: response.data } });
         } catch(error) {
           if(error.response) {

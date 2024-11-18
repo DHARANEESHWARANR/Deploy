@@ -25,7 +25,6 @@ window.addEventListener("message", (event) => {
 
 
 
-
 chrome.storage.onChanged.addListener((changes, areaName) => {
   if (areaName === "local" && changes.openTabs) {
       console.log("Detected change in openTabs storage:", changes.openTabs.newValue);

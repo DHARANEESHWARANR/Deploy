@@ -1,0 +1,16 @@
+.parent-div-for-searchPage-component{
+    background-color: rgb(207, 199, 199);
+    text-align: center;
+    height: 300%;
+}
+
+
+#searchTitle-input {
+    border: none; 
+    border-bottom: 2px solid black; 
+    outline: none; 
+    padding: 5px; 
+    width: 50%; 
+    box-sizing: border-box; 
+  }
+  

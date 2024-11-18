@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { cloneElement, useState } from 'react';
 import './CollectionPage.css';
 import CollectionTabs from './CollectionTabs';
 import axios from 'axios';
@@ -92,7 +92,7 @@ const CollectionList = ({ collections, setCollections, userData }) => {
         setEditId(null); 
     };
 
-    const handleGetAllTabs = async(collection_id)=>{
+    const handleGetAllTabs = async(collection_id,message)=>{
            try{
             const response = await axios.get(`http://localhost:3001/api/v1/collections/${collection_id}/bookmarks`);
             console.log(response.data.bookmarks);
@@ -100,15 +100,27 @@ const CollectionList = ({ collections, setCollections, userData }) => {
             response.data.bookmarks.map((tabs)=>{
                 urls.push(tabs.url);
             })
-            console.log(urls);
-            window.postMessage({type: "REMOVE_OTHER_TABS"},"*");
-            window.postMessage({type: "OPEN_ALL_TABS",urls: urls},"*");
+            
+            if (message === "OPEN AND CLOSE"){
+            window.postMessage({type:"REMOVE_OTHER_TABS"},"*");
+            setTimeout(()=>{
+                window.postMessage({type: "OPEN_ALL_TABS",urls: urls},"*");
+                console.log("Opening after the closing");
+            },200);
+            } 
+
+            if (message === "OPEN ALL TABS"){
+                window.postMessage({type: "OPEN_ALL_TABS",urls: urls},"*");
+                } 
            }
            catch(error){
             console.log("Error:",error);
            }
     }
 
+   const SomeFucntion = async()=>{
+    
+   }
     return (
         <div className="divforcollectionlist">
             <button onClick={handleClick}>Create Collection</button>
@@ -151,7 +163,9 @@ const CollectionList = ({ collections, setCollections, userData }) => {
                                 </h3>
                                 <button onClick={() => handleDelete(collection.id)}>Delete</button>
                                 <button onClick={() => handleEditClick(collection)}>Edit</button>
-                                <button onClick={()=> handleGetAllTabs(collection.id)}>Open All Tabs</button>
+                                <button onClick={()=> handleGetAllTabs(collection.id,"OPEN AND CLOSE")}>⇅</button>
+                                <button onClick={()=> handleGetAllTabs(collection.id,"OPEN ALL TABS")}>↗</button>
+                                <button onClick={()=>SomeFucntion}>:</button>
                             </>
                         )}
                         <CollectionTabs collection_id={collection.id} />
