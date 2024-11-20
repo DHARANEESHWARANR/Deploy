@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import './CollectionPage.css'
+// import './CollectionPage.css'
 
 
 const CollectionTabs = ({collection_id}) =>{
@@ -26,18 +26,41 @@ const CollectionTabs = ({collection_id}) =>{
     },[collection_id]);
 
     return(
-        <div className="collection-tabs-container">
-            <ul className="collection-tabs">
-                   {allTabs.map((tab) => (
-                    <li key={tab.id} className="tab-item">
-                    <img src={tab.favicon_url} alt={`${tab.title} icon`} />
-                    <a href={tab.url} target="_blank" rel="noopener noreferrer">
-                      {tab.title}
-                    </a>
-                  </li>
-                 ))}
-           </ul>
-        </div>
+      <div className="collection-tabs-container p-4 pl-10 pr-16  pb-10 border-b">
+      <ul className="collection-tabs grid grid-cols-3 gap-4 justify">
+        {allTabs && allTabs.map((tab) => (
+          <li
+          key={tab.id}
+          className="tab-item shadow-md rounded-lg p-4 flex flex-col items-center space-y-2 hover:border-[#B7B7CE] hover:bg-[#F5F5FB] hover:translate-y-1 transition-transform w-50"
+        >
+          <div className='flex'>
+          <img
+            src={tab.favicon_url}
+            alt={`${tab.title} icon`}
+            className="w-6 h-6 mb-2"
+          />
+          <a
+            href={tab.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-800 font-semibold text-center pb-2 pl-4"
+          >
+            {tab.title.slice(0, 12)}
+            {tab.title.length > 12 && '...'}
+          </a>
+          </div>
+          <div className="w-full">
+            <h1 className="text-sm font-medium  text-gray-400 border-t border-gray-300 pt-1">
+            {tab.title && tab.title.slice(0, 10)}
+            {tab.title.length > 10 && '...'}
+            </h1>
+          </div>
+        </li>
+        
+        ))}
+      </ul>
+    </div>
+    
 
     );
 }

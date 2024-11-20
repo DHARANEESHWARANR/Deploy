@@ -26,8 +26,7 @@ const HomePage = () => {
       <div className="signup_page_right_side">
         <h1 id="header_1">Sign up with Toby</h1>
         <h1 id="header_2">Already have an account?<Link to="/login">Log in</Link></h1>
-
-        {/* Google login button */}
+        {/* Google login button */} 
         <div className="google_button">
           <GoogleLoginButton
             onLoginSuccess={handleLoginSuccess}

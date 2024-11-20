@@ -1,13 +1,16 @@
 import React, { cloneElement, useContext, useEffect, useState } from "react";
-import './TabList.css';
+// import './TabList.css';
 import { CollectionsContext } from "../../contexts/CollectionsContext";
 import { UserContext } from "../../contexts/UsersContext";
 import axios from "axios";
+import { useViewTransitionState } from "react-router-dom";
 function MyComponent() {
   const {usersData,setUsersData} = useContext(UserContext);
   const user_id = parseInt(localStorage.getItem('user_id'),10);
   const [storedData, setStoredData] = useState([]);
   const {collections,setCollections} = useContext(CollectionsContext);
+  const [visible,setVisible] = useState(true);
+
   useEffect(() => {
     // Listen for messages from content script
     const handleMessage = (event) => {
@@ -60,21 +63,34 @@ function MyComponent() {
       console.log("Error:",error);
     }
   }
-
+  const handleWindowDropDown = () =>{
+    setVisible(!visible);
+  }
   return (
-    <div>
-  <button onClick={handleClickOfSaveSession}>Save Session</button>
-  <ul>
-    {storedData.map((tab) => (
-      <li key={tab.id} className="tab-item">
-        <img src={tab.favicon_url} alt={`${tab.title} icon`} />
-        <a href={tab.url} target="_blank" rel="noopener noreferrer">
-          {tab.title}
+    <div className="border w-[100%] shadow-lg">
+  <div className="flex mt-[15px] items-center ">
+     <h1 className="text-md text-[#474759] pl-[15px]">window1</h1>
+     <span onClick={handleWindowDropDown} className="text-[20px] cursor-pointer">{
+      !visible ? <span className=""> 🔻 </span> :  <span className="text-[30px] text-pink-500 ml-2 pb-[12px]"> › </span>
+      }</span>
+     <button className="ml-[100px]" onClick={handleClickOfSaveSession}>⬇️</button>
+     <button className="pl-[10px] text-[#b5b2aa] text-[20px]">x</button>
+  </div>
+
+  {
+    visible && <ul className="">
+    {storedData && storedData.map((tab) => (
+      <li key={tab.id} className="tab-item flex border mx-6 my-3 mb-[15px] p-2 items-center rounded-lg shadow-lg hover:border-[#B7B7CE] hover:bg-[#F5F5FB] hover:translate-y-1 transition-transform">
+        <img src={tab.favicon_url} alt={`${tab.title} icon`} className="w-5 h-5 object-contain" />
+        <a href={tab.url} target="_blank" rel="noopener noreferrer" className="pl-2 text-[#1E1E26]">
+        {tab.title && tab.title.slice(0, 12)} {/* Truncate to the first 10 characters */}
+        {tab.title.length > 12 && '...'} {/* Add ellipsis if title exceeds 10 characters */}
         </a>
       </li>
     ))}
-  </ul>
-</div>
+    </ul>
+  }
+   </div>
   );
 }
 

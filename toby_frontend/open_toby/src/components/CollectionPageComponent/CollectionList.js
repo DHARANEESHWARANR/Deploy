@@ -1,7 +1,8 @@
 import React, { cloneElement, useState } from 'react';
-import './CollectionPage.css';
+// import './CollectionPage.css';
 import CollectionTabs from './CollectionTabs';
 import axios from 'axios';
+
 
 const CollectionList = ({ collections, setCollections, userData }) => {
     const user_id = userData.user.id;
@@ -123,7 +124,13 @@ const CollectionList = ({ collections, setCollections, userData }) => {
    }
     return (
         <div className="divforcollectionlist">
-            <button onClick={handleClick}>Create Collection</button>
+            <div className="border w-full h-[75px] pt-6">
+             <button className="text-[15px] pl-10 text-[#f65077]">DRAG AND DROP</button>
+             <button className="text-[15px] pl-6 text-[#f65077]">TAG FILTER</button>
+             <button className="text-[15px] pl-6 text-[#f65077]">VIEW</button>
+             <button className="text-[15px] pl-6 text-[#f65077]">EXPAND</button>
+             <button onClick={handleClick} className="text-[13px] ml-80 border bg-[#f65077] text-[#ffffff] p-1 rounded-md">+ ADD COLLECTION</button>
+            </div>
             {clicked === 1 && (
                 <form onSubmit={handleSubmit} className="collectionTitleForm">
                     <div className="collectionTitleInFormDiv">
@@ -143,35 +150,36 @@ const CollectionList = ({ collections, setCollections, userData }) => {
                     </button>
                 </form>
             )}
+            <div className='h-30'>
             <ul className="collection-list">
                 {collections.map((collection) => (
                     <li key={collection.id} className="collection-item">
                         {editId === collection.id ? (
-                            <>
+                            <div className="tailwind">
                                 <input
                                     type="text"
                                     value={editTitle}
                                     onChange={handleEditChange}
                                 />
-                                <button onClick={(event) => handleEditSubmit(event,collection.id)}>Save</button>
-                                <button onClick={handleEditCancel}>Cancel</button>
-                            </>
+                                <button onClick={(event) => handleEditSubmit(event,collection.id)} >Save</button>
+                                <button onClick={handleEditCancel} className='text-pink-100'>Cancel</button>
+                            </div>
                         ) : (
-                            <>
-                                <h3 className="collection-item-h3">
+                            <div className="flex h-[60px] items-center justify w-full">
+                                <h3 className="collection-item-h3 text-gray-500 pl-8 text-[25px] ">
                                     <b>{collection.title}</b>
                                 </h3>
-                                <button onClick={() => handleDelete(collection.id)}>Delete</button>
-                                <button onClick={() => handleEditClick(collection)}>Edit</button>
-                                <button onClick={()=> handleGetAllTabs(collection.id,"OPEN AND CLOSE")}>⇅</button>
-                                <button onClick={()=> handleGetAllTabs(collection.id,"OPEN ALL TABS")}>↗</button>
-                                <button onClick={()=>SomeFucntion}>:</button>
-                            </>
+                                <button onClick={()=> handleGetAllTabs(collection.id,"OPEN ALL TABS")} className=' ml-96 text-[#f65077] text-[18px]'>↗</button>
+                                <button onClick={()=> handleGetAllTabs(collection.id,"OPEN AND CLOSE")} className=' pl-[20px] text-[#f65077] text-[18px]'>⇅</button>
+                                <button onClick={() => handleDelete(collection.id)} className=' pl-[20px] text-[#f65077] text-[15px]'>Delete</button>
+                                <button onClick={() => handleEditClick(collection)} className=' pl-[20px] text-[#f65077] text-[15px]'>Edit</button>
+                            </div>
                         )}
                         <CollectionTabs collection_id={collection.id} />
                     </li>
                 ))}
             </ul>
+            </div>
         </div>
     );
 };
