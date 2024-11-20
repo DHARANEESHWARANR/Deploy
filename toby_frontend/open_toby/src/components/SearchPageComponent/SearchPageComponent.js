@@ -125,7 +125,7 @@ const SearchPageComponent = () => {
                 </div>
             </div>
             <div className="results-container">
-                {filteredData.length > 0 ? (
+                {filteredData && filteredData.length > 0 ? (
                     filteredData.map((item, index) => (
                         <div key={index} className="result-item">
                             <h3>{item.title || 'Untitled'}</h3>

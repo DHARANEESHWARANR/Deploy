@@ -14,7 +14,15 @@ window.addEventListener("message",(event)=>{
   if(event.source === window && event.data.type =="REMOVE_OTHER_TABS"){
     chrome.runtime.sendMessage("remove_tabs_except_current_one");
   }
+  if(event.source === window && event.data.type =="REMOVE_UNIQUE_TAB_WITH_ID"){
+    console.log("The message is received from the tablist to delete");
+    chrome.runtime.sendMessage({
+      type: "REMOVE_TAB",
+      id: event.data.id, 
+    });
+  }
 })
+
 
 window.addEventListener("message", (event) => {
   if (event.source !== window) return;

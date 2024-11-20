@@ -8,7 +8,7 @@ function collectAndStoreTabs(excludeTabId = null) {
               id: tab.id,
               url: tab.url || null, 
               title: tab.title || null,
-              favicon_url: tab.favIconUrl || null              
+              favicon_url: tab.favIconUrl || null
           }));
       chrome.storage.local.set({ openTabs: tabInfo }, () => {
           if (chrome.runtime.lastError) {
@@ -133,3 +133,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === "REMOVE_TAB") {
+    console.log("Message received: REMOVE_UNIQUE_TAB_WITH_ID", message.id);
+    chrome.tabs.remove(message.id, () => {
+      if (chrome.runtime.lastError) {
+        console.error("Failed to remove tab:", chrome.runtime.lastError.message);
+      } else {
+        console.log(`Tab with ID ${message.id} successfully removed`);
+        sendResponse({ success: true });
+      }
+    });
+    return true;
+  }
+});

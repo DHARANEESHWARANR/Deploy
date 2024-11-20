@@ -1,5 +1,8 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { CollectionsContext } from '../../contexts/CollectionsContext';
+import { useContext } from 'react';
+
 // import './CollectionPage.css'
 
 
@@ -16,7 +19,6 @@ const CollectionTabs = ({collection_id}) =>{
               console.log("---------------------------------------")
               console.log(allTabs);
               console.log("---------------------------------------")
-
             }
             catch(error){
                  console.log("Error",error);
@@ -24,6 +26,19 @@ const CollectionTabs = ({collection_id}) =>{
         }
         if (collection_id) fetchTabs();
     },[collection_id]);
+
+    const handleTabsDeletion = async(bookmark_id)=>{
+      try{
+        const response = await axios.delete(`http://localhost:3001/api/v1/collections/${collection_id}/bookmarks/${bookmark_id}`)
+        const updated_tabs = allTabs.filter((tab)=>
+          tab.id !== bookmark_id
+        );
+        setAllTabs(updated_tabs);
+      }
+      catch(error){
+        console.log("Error:",error);
+      }
+    }
 
     return(
       <div className="collection-tabs-container p-4 pl-10 pr-16  pb-10 border-b">
@@ -55,8 +70,8 @@ const CollectionTabs = ({collection_id}) =>{
             {tab.title.length > 10 && '...'}
             </h1>
           </div>
+          <button className="absolute bottom-20 right-1  group-hover:flex items-center justify-center text-gray-400 bg-transparent p-1 w-8 h-8 rounded-full hover:bg-pink-500 hover:text-white transition-all duration-200 flex items-center justify-center" onClick={()=> handleTabsDeletion(tab.id)}>x</button>
         </li>
-        
         ))}
       </ul>
     </div>

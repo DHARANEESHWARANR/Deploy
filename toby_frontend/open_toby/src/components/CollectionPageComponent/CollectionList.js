@@ -152,8 +152,8 @@ const CollectionList = ({ collections, setCollections, userData }) => {
             )}
             <div className='h-30'>
             <ul className="collection-list">
-                {collections.map((collection) => (
-                    <li key={collection.id} className="collection-item">
+                {collections && collections.map((collection) => (
+                    <li key={collection.id} className="collection-item snap-y">
                         {editId === collection.id ? (
                             <div className="tailwind">
                                 <input
