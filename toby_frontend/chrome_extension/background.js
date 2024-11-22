@@ -1,4 +1,4 @@
-// Function to collect and store details of all tabs except the specified one
+
 function collectAndStoreTabs(excludeTabId = null) {
   chrome.tabs.query({}, (tabs) => {
     console.log(tabs);
@@ -87,25 +87,22 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
 // Message listener for content script requests
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    console.log("List-----------------------------------");
+  console.log("Received message:", message);
+
+  // Handle "getTabs" request
   if (message === "getTabs") {
-      chrome.storage.local.get("openTabs", (data) => {
-          sendResponse({ tabs: data.openTabs });
-      });
-      return true; 
+    chrome.storage.local.get("openTabs", (data) => {
+      sendResponse({ tabs: data.openTabs });
+    });
+    return true; // Keeps the response channel open for async response
   }
-});
 
-
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log(message);
+  // Handle "remove_tabs_except_current_one" request
   if (message === "remove_tabs_except_current_one") {
-    console.log("Hello bhaiya");
+    console.log("Removing all tabs except the current one...");
     chrome.tabs.query({}, (tabs) => {
-      console.log(tabs);
       chrome.tabs.query({ active: true, currentWindow: true }, (activeTabs) => {
-        console.log(activeTabs)
-        const activeTabId = activeTabs[0].id;
+        const activeTabId = activeTabs[0]?.id;
         tabs.forEach((tab) => {
           if (tab.id !== activeTabId) {
             chrome.tabs.remove(tab.id);
@@ -114,37 +111,49 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       });
     });
   }
-});
 
-
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log("Received message:", message);
-  
+  // Handle "OPEN_ALL_TABS" request
   if (message.action === "OPEN_ALL_TABS" && Array.isArray(message.urls)) {
     console.log("Opening all tabs with URLs:", message.urls);
-  
     message.urls.forEach((url) => {
       if (url) {
         chrome.tabs.create({ url });
       }
     });
-    
     sendResponse({ status: "success", message: "Tabs opened successfully." });
   }
-});
 
-
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // Handle "REMOVE_TAB" request
   if (message.type === "REMOVE_TAB") {
-    console.log("Message received: REMOVE_UNIQUE_TAB_WITH_ID", message.id);
+    console.log("Removing tab with ID:", message.id);
     chrome.tabs.remove(message.id, () => {
       if (chrome.runtime.lastError) {
         console.error("Failed to remove tab:", chrome.runtime.lastError.message);
       } else {
-        console.log(`Tab with ID ${message.id} successfully removed`);
+        console.log(`Tab with ID ${message.id} successfully removed.`);
         sendResponse({ success: true });
       }
     });
+    return true; // Keeps the response channel open for async response
+  }
+
+  // Handle "REMOVE_ALL_TABS_WITH_ID" request
+  if (message.type === "REMOVE_ALL_TABS_WITH_ID") {
+    console.log("Removing tabs with IDs:", message.urls);
+    message.urls.forEach((tabId) => {
+      chrome.tabs.remove(tabId, () => {
+        if (chrome.runtime.lastError) {
+          console.error("Failed to remove tab:", chrome.runtime.lastError.message);
+        } else {
+          console.log(`Tab with ID ${tabId} successfully removed.`);
+        }
+      });
+    });
+    sendResponse({ success: true });
     return true;
   }
 });
+
+
+
+
