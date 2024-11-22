@@ -11,6 +11,7 @@ const CollectionList = ({ collections, setCollections, userData }) => {
     const [collectionTitle, setCollectionTitle] = useState("");
     const [editId, setEditId] = useState(null); 
     const [editTitle, setEditTitle] = useState(""); 
+    const[visible,setVisible] = useState({});
 
     const handleClick = () => {
         clicked === 0 ? setClicked(1) : setClicked(0);
@@ -118,10 +119,14 @@ const CollectionList = ({ collections, setCollections, userData }) => {
             console.log("Error:",error);
            }
     }
-
-   const SomeFucntion = async()=>{
     
-   }
+    const handleVisibilityToggle = (collection_id) => {
+        setVisible((prevVisibility) => ({
+            ...prevVisibility,
+            [collection_id]: !prevVisibility[collection_id], // Toggle visibility for the specific collection
+        }));
+    };
+
     return (
         <div className="divforcollectionlist">
             <div className="border w-full h-[75px] pt-6">
@@ -168,6 +173,16 @@ const CollectionList = ({ collections, setCollections, userData }) => {
                             <div className="flex h-[60px] items-center justify w-full">
                                 <h3 className="collection-item-h3 text-gray-500 pl-8 text-[25px] ">
                                     <b>{collection.title}</b>
+                                    <span
+                                            onClick={() => handleVisibilityToggle(collection.id)}
+                                            className="text-[20px] cursor-pointer"
+                                        >
+                                            {visible[collection.id] ? (
+                                                <span className="text-[30px] text-pink-500 ml-2 pb-[12px]">›</span>
+                                            ) : (
+                                                <span>🔻</span>
+                                            )}
+                                        </span>
                                 </h3>
                                 <button onClick={()=> handleGetAllTabs(collection.id,"OPEN ALL TABS")} className=' ml-96 text-[#f65077] text-[18px]'>↗</button>
                                 <button onClick={()=> handleGetAllTabs(collection.id,"OPEN AND CLOSE")} className=' pl-[20px] text-[#f65077] text-[18px]'>⇅</button>
@@ -175,7 +190,7 @@ const CollectionList = ({ collections, setCollections, userData }) => {
                                 <button onClick={() => handleEditClick(collection)} className=' pl-[20px] text-[#f65077] text-[15px]'>Edit</button>
                             </div>
                         )}
-                        <CollectionTabs collection_id={collection.id} />
+                          {visible[collection.id] && (<CollectionTabs collection_id={collection.id} />)}
                     </li>
                 ))}
             </ul>
@@ -185,3 +200,5 @@ const CollectionList = ({ collections, setCollections, userData }) => {
 };
 
 export default CollectionList;
+
+

@@ -73,6 +73,18 @@ function MyComponent() {
       console.log(tab_id)
       window.postMessage({type: "REMOVE_UNIQUE_TAB_WITH_ID",id: tab_id},"*");
   }
+
+  const handleDeleteAllTabs = () =>{
+      console.log("Triggred");
+      const all_urls_id = [];
+      storedData.map((tab)=> 
+       {all_urls_id.push(tab.id);}
+      );
+      window.postMessage({type: "REMOVE_ALL_TABS_WITH_ID",all_url_id: all_urls_id},"*");
+      setTimeout(()=>{
+        setStoredData([]);
+      },500);
+  }
   return (
     <div className="border w-[100%] shadow-lg">
   <div className="flex mt-[15px] items-center ">
@@ -81,7 +93,7 @@ function MyComponent() {
       !visible ? <span className=""> 🔻 </span> :  <span className="text-[30px] text-pink-500 ml-2 pb-[12px]"> › </span>
       }</span>
      <button className="ml-[100px]" onClick={handleClickOfSaveSession}>⬇️</button>
-     <button className="pl-[10px] text-[#b5b2aa] text-[20px]">x</button>
+     <button className="pl-[10px] text-[#b5b2aa] text-[20px]" onClick={handleDeleteAllTabs}>x</button>
   </div>
 
   {

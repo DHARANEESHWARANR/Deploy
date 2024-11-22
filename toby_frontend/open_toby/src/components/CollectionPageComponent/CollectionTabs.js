@@ -33,7 +33,7 @@ const CollectionTabs = ({collection_id}) =>{
         const updated_tabs = allTabs.filter((tab)=>
           tab.id !== bookmark_id
         );
-        setAllTabs(updated_tabs);
+        setAllTabs(updated_tabs)
       }
       catch(error){
         console.log("Error:",error);
@@ -42,11 +42,11 @@ const CollectionTabs = ({collection_id}) =>{
 
     return(
       <div className="collection-tabs-container p-4 pl-10 pr-16  pb-10 border-b">
-      <ul className="collection-tabs grid grid-cols-3 gap-4 justify">
+      <ul className="collection-tabs grid grid-cols-3 justify" >
         {allTabs && allTabs.map((tab) => (
           <li
           key={tab.id}
-          className="tab-item shadow-md rounded-lg p-4 flex flex-col items-center space-y-2 hover:border-[#B7B7CE] hover:bg-[#F5F5FB] hover:translate-y-1 transition-transform w-50"
+          className="tab-item shadow-md rounded-lg p-4 flex flex-col items-center space-y-2 hover:border-[#B7B7CE]  hover:translate-y-1 transition-transform w-[250px] h-[105px] bg-[#ffffff]"
         >
           <div className='flex'>
           <img
