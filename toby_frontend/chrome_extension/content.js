@@ -11,15 +11,26 @@ window.addEventListener("message", (event) => {
 
 window.addEventListener("message",(event)=>{
   if(event.source!==window) return;
+
   if(event.source === window && event.data.type =="REMOVE_OTHER_TABS"){
     chrome.runtime.sendMessage("remove_tabs_except_current_one");
   }
+  
   if(event.source === window && event.data.type =="REMOVE_UNIQUE_TAB_WITH_ID"){
     console.log("The message is received from the tablist to delete");
     chrome.runtime.sendMessage({
       type: "REMOVE_TAB",
       id: event.data.id, 
     });
+  }
+
+  if(event.source === window && event.data.type == "REMOVE_ALL_TABS_WITH_ID"){
+     console.log("The message came from the delete all tabs with Id");
+     console.log(event.data.all_url_id);
+     chrome.runtime.sendMessage({
+      type: "REMOVE_ALL_TABS_WITH_ID",
+      urls: event.data.all_url_id
+     });
   }
 })
 
