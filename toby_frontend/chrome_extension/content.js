@@ -17,7 +17,6 @@ window.addEventListener("message", (event) => {
 
   // Handle requests to remove a unique tab by ID
   if (event.data.type === "REMOVE_UNIQUE_TAB_WITH_ID") {
-    console.log("Message received to delete a unique tab with ID");
     chrome.runtime.sendMessage({
       type: "REMOVE_TAB",
       id: event.data.id,
@@ -26,7 +25,6 @@ window.addEventListener("message", (event) => {
 
   // Handle requests to remove multiple tabs by ID
   if (event.data.type === "REMOVE_ALL_TABS_WITH_ID") {
-    console.log("Message received to delete all tabs with IDs:", event.data.all_url_id);
     chrome.runtime.sendMessage({
       type: "REMOVE_ALL_TABS_WITH_ID",
       urls: event.data.all_url_id,

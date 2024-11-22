@@ -4,8 +4,6 @@ import axios from 'axios';
 const UserProfileLogo = () =>{
    const user_name = localStorage.getItem("user_name");
    const firstTwoLetters = user_name?.slice(0, 2);
-   console.log("THIS IS USERNAME OF THE USER")
-   console.log(user_name);
    return(
    <>
     <div className='initials flex items-center justify-center bg-[#f65077] h-12 w-12 rounded-full mx-2 my-2 mt-3'>

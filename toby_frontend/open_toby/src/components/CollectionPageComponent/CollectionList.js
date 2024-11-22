@@ -71,14 +71,10 @@ const CollectionList = ({ collections, setCollections, userData }) => {
             });
             
             const updatedCollection = response.data.collection;
-            console.log("Updated Collection from response:", updatedCollection);
-    
-           
             setCollections((prevCollections) => {
                 const updatedCollections = prevCollections.map((collection) =>
                     collection.id === collection_id ? updatedCollection : collection
                 );
-                console.log("Updated collections inside setCollections:", updatedCollections);
                 return updatedCollections;
             });
     
@@ -97,7 +93,6 @@ const CollectionList = ({ collections, setCollections, userData }) => {
     const handleGetAllTabs = async(collection_id,message)=>{
            try{
             const response = await axios.get(`http://localhost:3001/api/v1/collections/${collection_id}/bookmarks`);
-            console.log(response.data.bookmarks);
             const urls = [];
             response.data.bookmarks.map((tabs)=>{
                 urls.push(tabs.url);
@@ -106,8 +101,7 @@ const CollectionList = ({ collections, setCollections, userData }) => {
             if (message === "OPEN AND CLOSE"){
             window.postMessage({type:"REMOVE_OTHER_TABS"},"*");
             setTimeout(()=>{
-                window.postMessage({type: "OPEN_ALL_TABS",urls: urls},"*");
-                console.log("Opening after the closing");
+                window.postMessage({type: "OPEN_ALfL_TABS",urls: urls},"*");
             },200);
             } 
 

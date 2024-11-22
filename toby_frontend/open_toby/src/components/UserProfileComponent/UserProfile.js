@@ -8,10 +8,7 @@ import UserProfileSearch from './UserProfileSearch';
 const UserProfile = () => {
   const location = useLocation();
   const { userData } = location.state || {}; // Access userData
-
-  console.log("This is in UserProfile Page");
-  console.log("User Data:", userData); // Log the user data received
-
+  
   return (
     <div className="flex h-screen">
       {/* Column 1: User Details with Logo */}

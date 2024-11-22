@@ -12,13 +12,7 @@ const CollectionTabs = ({collection_id}) =>{
         const fetchTabs = async() =>{
             try{
               const tabs_response = await axios.get(`http://localhost:3001/api/v1/collections/${collection_id}/bookmarks`);
-              console.log("---------------------------------------")
-              console.log(tabs_response.data.bookmarks);
-              console.log("---------------------------------------")
               setAllTabs(tabs_response.data.bookmarks);
-              console.log("---------------------------------------")
-              console.log(allTabs);
-              console.log("---------------------------------------")
             }
             catch(error){
                  console.log("Error",error);

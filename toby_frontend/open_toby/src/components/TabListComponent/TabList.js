@@ -29,7 +29,6 @@ function MyComponent() {
   }, []);
 
   const handleClickOfSaveSession = async() =>{
-    console.log(user_id);
     const now = new Date();
     const options = { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
     const formattedTitle = now.toLocaleString('en-US', options);
@@ -45,18 +44,15 @@ function MyComponent() {
         })),
       },
     };
-   console.log(payload);
+
     try{
       const response = await axios.post('http://localhost:3001/api/v1/collections', payload);
-      console.log("The Collection with the bulk is created");
       if(response.data && response.data.collection){
         const new_collection = response.data.collection;
         setCollections((prev_collections)=>[new_collection,...prev_collections]);
-        console.log("The updated collection is :",collections);
         window.postMessage({type: "REMOVE_OTHER_TABS"},"*");
         setTimeout(()=>{
           setStoredData([]);
-          console.log("The store data is now emty");
         },2000);
       }
     }
@@ -70,12 +66,10 @@ function MyComponent() {
 
   const handleTabsDelete = async(event,tab_id) =>{
     event.preventDefault();
-      console.log(tab_id)
       window.postMessage({type: "REMOVE_UNIQUE_TAB_WITH_ID",id: tab_id},"*");
   }
 
   const handleDeleteAllTabs = () =>{
-      console.log("Triggred");
       const all_urls_id = [];
       storedData.map((tab)=> 
        {all_urls_id.push(tab.id);}
