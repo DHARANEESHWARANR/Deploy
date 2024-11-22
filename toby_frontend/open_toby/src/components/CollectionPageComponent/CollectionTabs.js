@@ -54,14 +54,14 @@ const CollectionTabs = ({collection_id}) =>{
             rel="noopener noreferrer"
             className="text-gray-800 font-semibold text-center pb-2 pl-4"
           >
-            {tab.title.slice(0, 12)}
-            {tab.title.length > 12 && '...'}
+            {tab.title && tab.title.slice(0, 12)}
+            {tab.title && tab.title.length > 12 && '...'}
           </a>
           </div>
           <div className="w-full">
             <h1 className="text-sm font-medium  text-gray-400 border-t border-gray-300 pt-1">
             {tab.title && tab.title.slice(0, 10)}
-            {tab.title.length > 10 && '...'}
+            {tab.title && tab.title.length > 10 && '...'}
             </h1>
           </div>
           <button className="absolute bottom-20 right-1  group-hover:flex items-center justify-center text-gray-400 bg-transparent p-1 w-8 h-8 rounded-full hover:bg-pink-500 hover:text-white transition-all duration-200 flex items-center justify-center" onClick={()=> handleTabsDeletion(tab.id)}>x</button>
