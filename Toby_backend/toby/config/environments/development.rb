@@ -74,4 +74,16 @@ Rails.application.configure do
   # config.generators.apply_rubocop_autocorrect_after_generate!
   config.middleware.use ActionDispatch::Session::CookieStore
 
+  Rails.application.configure do
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins '*' 
+        resource '*',
+                 headers: :any,
+                 methods: [:get, :post, :put, :patch, :delete, :options, :head]
+      end
+    end
+  
+  end
+
 end
