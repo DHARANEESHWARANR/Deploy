@@ -1,103 +1,128 @@
 
-function collectAndStoreTabs(excludeTabId = null) {
+// Function to collect and store tabs grouped by window
+function collectAndStoreTabsByWindow(excludeTabId = null) {
   chrome.tabs.query({}, (tabs) => {
-    console.log(tabs);
-      const tabInfo = tabs
-          .filter((tab) => tab.id !== excludeTabId  && tab.title !== "React App" && tab.title !== "Extensions" && tab.title !=="New Tab")  // Exclude specified tab
-          .map((tab) => ({
-              id: tab.id,
-              url: tab.url || null, 
-              title: tab.title || null,
-              favicon_url: tab.favIconUrl || null
-          }));
-      chrome.storage.local.set({ openTabs: tabInfo }, () => {
+      console.log(tabs);
+      const tabsByWindow = {};
+      tabs.forEach((tab) => {
+          if (tab.id !== excludeTabId && tab.title !== "React App" && tab.title !== "Extensions") {
+              if (!tabsByWindow[tab.windowId]) {
+                  tabsByWindow[tab.windowId] = [];
+              }
+              tabsByWindow[tab.windowId].push({
+                  id: tab.id,
+                  url: tab.url || null, 
+                  title: tab.title || null,
+                  favicon_url: tab. favIconUrl || null
+              });
+          }
+      });
+
+      chrome.storage.local.set({ windowTabs: tabsByWindow }, () => {
           if (chrome.runtime.lastError) {
-              console.error("Error saving tab details:", chrome.runtime.lastError);
+              console.error("Error saving window-tab details:", chrome.runtime.lastError);
           } else {
-              console.log("Tab details successfully saved:", tabInfo);
+              console.log("Window-tab details successfully saved:", tabsByWindow);
           }
       });
   });
 }
 
-// Retry fetching tab information to capture missing titles or URLs
-function refreshTabDetails() {
-  chrome.tabs.query({}, (tabs) => {
-      chrome.storage.local.get("openTabs", (data) => {
-          const openTabs = data.openTabs || [];
+function refreshTabDetailsByWindow(){
+  console.log("The refresh() is called ");
+  chrome.tabs.query({},(tabs)=>{
+       chrome.storage.local.get("windowTabs",(data)=>{
+           const existingCollection = data.windowTabs || [];
+           const updatedWindowCollection = {};
+           tabs.forEach((tab)=>{
+              if(!updatedWindowCollection[tab.windowId]){
+                   updatedWindowCollection[tab.windowId] = [];
+              }
+              const existingTab = existingCollection[tab.windowId].find((t)=> t.id === tab.id);
+              if(tab.title !== "React App" && tab.title !== "Extensions"){
+              updatedWindowCollection[tab.windowId].push({
+                  id: tab.id,
+                  url: tab.url || (existingTab ? existingTab.url : null),
+                  title: tab.title || (existingTab ? existingTab.title : null),
+                  favicon_url: tab. favIconUrl || (existingTab ? existingTab.favicon_url : null)
+              });
+            }
+           });
 
-          const updatedTabs = tabs
-          .filter((tab) => tab.title !== "Extensions" && tab.title !== "React App" && tab.title!=="New Tab")  // Filtering unwanted tabs first
-          .map((tab) => {
-            const existingTab = openTabs.find((t) => t.id === tab.id);
-            return {
-              id: tab.id,
-              url: tab.url || (existingTab ? existingTab.url : null),
-              title: tab.title || (existingTab ? existingTab.title : null),
-              favicon_url: tab.favIconUrl || (existingTab ? existingTab.favicon_url : null),
-            };
-          });
-
-          chrome.storage.local.set({ openTabs: updatedTabs }, () => {
+           chrome.storage.local.set({ windowTabs: updatedWindowCollection }, () => {
               if (chrome.runtime.lastError) {
-                  console.error("Error refreshing tab details:", chrome.runtime.lastError);
+                  console.error("Error refreshing window-tab details:", chrome.runtime.lastError);
               } else {
-                  console.log("Refreshed tab details:", updatedTabs);
+                  console.log("Refreshed window-tab details:", updatedWindowCollection);
               }
           });
-      });
-  });
+      })
+  })
 }
 
 
-// Initial storage of all open tabs when extension loads
+chrome.tabs.onRemoved.addListener((removedTabId)=>{
+  collectAndStoreTabsByWindow();
+
+})
+
 chrome.runtime.onInstalled.addListener(() => {
-  collectAndStoreTabs();
-  
-  setTimeout(refreshTabDetails, 1000);  
+  collectAndStoreTabsByWindow();
+  setTimeout(refreshTabDetailsByWindow, 1000); 
 });
 
-// Listen for new tab creation and update storage
-chrome.tabs.onCreated.addListener((tab) => {
-  collectAndStoreTabs(tab.id);  
-});
+chrome.tabs.onCreated.addListener((tab)=>{
+  collectAndStoreTabsByWindow(tab.id);
+})
 
-// Listen for tab removal and update storage
-chrome.tabs.onRemoved.addListener((removedTabId) => {
-  
-  chrome.storage.local.get("openTabs", (data) => {
-      const openTabs = data.openTabs || [];
-      const updatedTabInfo = openTabs.filter((tab) => tab.id !== removedTabId);
-      chrome.storage.local.set({ openTabs: updatedTabInfo }, () => {
-          if (chrome.runtime.lastError) {
-              console.error("Error updating tab details on removal:", chrome.runtime.lastError);
-          } else {
-              console.log("Tab details successfully updated after removal:", updatedTabInfo);
-          }
-      });
-  });
-});
-
-// Listen for tab updates to get url and title when available
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === "complete" && tab.url && tab.title) {
-      refreshTabDetails();
+      refreshTabDetailsByWindow();
   }
+})
+
+
+chrome.windows.onCreated.addListener((window) => {
+  console.log("A new window was created:", window);
+  // Optionally call a function to collect and store tabs after window is created
+  collectAndStoreTabsByWindow();
 });
 
-// Message listener for content script requests
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log("Received message:", message);
 
+//listen for the messages from the content.js
+chrome.runtime.onMessage.addListener((message,sender,sendResponse)=>{
+  console.log("The Received Message is :",message);
   // Handle "getTabs" request
-  if (message === "getTabs") {
-    chrome.storage.local.get("openTabs", (data) => {
-      sendResponse({ tabs: data.openTabs });
+if (message === "getTabs") {
+  console.log("Getting Storage is Called");
+  chrome.storage.local.get("windowTabs", (data) => {
+    console.log(data.windowTabs);
+    sendResponse({ windowsAndTabsData: data.windowTabs });
+  });
+  return true; // Keeps the response channel open for async response
+}
+
+if(message.type === "Remove"){
+  console.log("Hey Finalyy buddy");
+  console.log(message.tab_id);
+  console.log(message.window_id);
+  chrome.tabs.remove(message.tab_id, () => {
+      if (chrome.runtime.lastError) {
+        console.error("Failed to remove tab:", chrome.runtime.lastError.message);
+      } else {
+        console.log(`Tab with ID ${tabId} successfully removed.`);
+      }
     });
-    return true; // Keeps the response channel open for async response
+
   }
 
-  // Handle "remove_tabs_except_current_one" request
+  if(message.type === "open_all_tabs"){
+     console.log("Message Came sucessfully");
+     message.urls.forEach((url)=>{
+      chrome.tabs.create({url});
+     })
+  }
+
   if (message === "remove_tabs_except_current_one") {
     console.log("Removing all tabs except the current one...");
     chrome.tabs.query({}, (tabs) => {
@@ -112,48 +137,32 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     });
   }
 
-  // Handle "OPEN_ALL_TABS" request
-  if (message.action === "OPEN_ALL_TABS" && Array.isArray(message.urls)) {
-    console.log("Opening all tabs with URLs:", message.urls);
-    message.urls.forEach((url) => {
-      if (url) {
-        chrome.tabs.create({ url });
-      }
-    });
-    sendResponse({ status: "success", message: "Tabs opened successfully." });
-  }
-
-  // Handle "REMOVE_TAB" request
-  if (message.type === "REMOVE_TAB") {
-    console.log("Removing tab with ID:", message.id);
-    chrome.tabs.remove(message.id, () => {
-      if (chrome.runtime.lastError) {
-        console.error("Failed to remove tab:", chrome.runtime.lastError.message);
-      } else {
-        console.log(`Tab with ID ${message.id} successfully removed.`);
-        sendResponse({ success: true });
-      }
-    });
-    return true; // Keeps the response channel open for async response
-  }
-
-  // Handle "REMOVE_ALL_TABS_WITH_ID" request
-  if (message.type === "REMOVE_ALL_TABS_WITH_ID") {
-    console.log("Removing tabs with IDs:", message.urls);
-    message.urls.forEach((tabId) => {
-      chrome.tabs.remove(tabId, () => {
-        if (chrome.runtime.lastError) {
-          console.error("Failed to remove tab:", chrome.runtime.lastError.message);
-        } else {
-          console.log(`Tab with ID ${tabId} successfully removed.`);
-        }
+  if(message.type === "REMOVE_ALL_TABS_IN_THE_TABLIST_USING_WINDOW_ID"){
+    console.log("The Datas in the storge are");
+    chrome.storage.local.get("windowTabs",(data)=>{
+      console.log(data.windowTabs);
+      var updatedWindowInformation = data.windowTabs;
+      if(updatedWindowInformation[message.window_id]){
+        console.log(updatedWindowInformation[message.window_id]);
+        updatedWindowInformation[message.window_id].map((tab)=>{
+          chrome.tabs.remove(tab.id);
+        })
+        console.log("All Removed Successfully");
+        delete updatedWindowInformation[message.window_id];
+        console.log("Deleted Successfully");
+        chrome.storage.local.set({ windowTabs: updatedWindowInformation }, () => {
+          if (chrome.runtime.lastError) {
+              console.error("Error refreshing window-tab details:", chrome.runtime.lastError);
+          } else {
+              console.log("Refreshed window-tab details:", updatedWindowCollection);
+          }
       });
-    });
-    sendResponse({ success: true });
-    return true;
+      }
+      else{
+        console.log("Failure");
+      }
+    })
   }
-});
 
 
-
-
+})

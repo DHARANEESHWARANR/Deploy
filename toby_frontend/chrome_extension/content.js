@@ -1,53 +1,48 @@
 
-// Listen for messages from the webpage
 window.addEventListener("message", (event) => {
   if (event.source !== window) return;
 
-  // Handle storage-related messages
   if (event.data.type === "GET_STORAGE") {
-    chrome.runtime.sendMessage("getTabs", (response) => {
-      window.postMessage({ type: "FROM_CONTENT_SCRIPT", data: response.tabs }, "*");
-    });
+      chrome.runtime.sendMessage("getTabs", (response) => {
+        console.log("The response Came Buddy2:")
+        console.log(response.windowsAndTabsData);
+          window.postMessage({ type: "FROM_CONTENT_SCRIPT", data: response.windowsAndTabsData }, "*");
+      });
+  }
+  if(event.data.type === "REMOVE_UNIQUE_TAB_WITH_ID"){
+    chrome.runtime.sendMessage({
+      type: "Remove",
+      tab_id: event.data.tab_id,
+      window_id: event.data.window_id
+    })
   }
 
-  // Handle requests to remove other tabs except the current one
+  if(event.data.type === "OPEN_ALL_TABS"){
+    chrome.runtime.sendMessage({
+      type: "open_all_tabs",
+      urls: event.data.urls,
+    })
+  }
+
   if (event.data.type === "REMOVE_OTHER_TABS") {
     chrome.runtime.sendMessage("remove_tabs_except_current_one");
   }
 
-  // Handle requests to remove a unique tab by ID
-  if (event.data.type === "REMOVE_UNIQUE_TAB_WITH_ID") {
-    chrome.runtime.sendMessage({
-      type: "REMOVE_TAB",
-      id: event.data.id,
-    });
+  if(event.data.type === "REMOVE_ALL_TABS_IN_THE_TABLIST_USING_WINDOW_ID"){
+    chrome.runtime.sendMessage({type:"REMOVE_ALL_TABS_IN_THE_TABLIST_USING_WINDOW_ID",window_id: event.data.window_id});
   }
 
-  // Handle requests to remove multiple tabs by ID
-  if (event.data.type === "REMOVE_ALL_TABS_WITH_ID") {
-    chrome.runtime.sendMessage({
-      type: "REMOVE_ALL_TABS_WITH_ID",
-      urls: event.data.all_url_id,
-    });
-  }
 
-  // Handle requests to open multiple tabs with URLs
-  if (event.data.type === "OPEN_ALL_TABS") {
-    console.log("Message received to open multiple tabs with URLs");
-    chrome.runtime.sendMessage({
-      action: "OPEN_ALL_TABS",
-      urls: event.data.urls,
-    });
-  }
 });
 
-// Listen for changes in the local storage
 chrome.storage.onChanged.addListener((changes, areaName) => {
-  if (areaName === "local" && changes.openTabs) {
-    console.log("Detected change in openTabs storage:", changes.openTabs.newValue);
-    chrome.storage.local.get("openTabs", (result) => {
-      window.postMessage({ type: "FROM_CONTENT_SCRIPT", data: result.openTabs }, "*");
-      console.log("Sent updated openTabs data to the React app:", result.openTabs);
-    });
+  if (areaName === "local" && changes.windowTabs) {
+      console.log("Detected change in windowTabs storage:", changes.windowTabs.newValue);
+      
+      chrome.storage.local.get("windowTabs", (result) => {
+          console.log("Message Sending updated openTabs data to React app:", result.windowTabs);
+          window.postMessage({ type: "FROM_CONTENT_SCRIPT", data: result.windowTabs }, "*");
+          console.log("Sent updated openTabs data to React app:", result.windowTabs);
+      });
   }
 });

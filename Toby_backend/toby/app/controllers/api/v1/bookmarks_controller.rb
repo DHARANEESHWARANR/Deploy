@@ -1,7 +1,6 @@
 class Api::V1::BookmarksController < ApplicationController
     def create
         bookmark = Bookmark.new(bookmark_params)
-        bookmark.collection_id = params[:bookmark][:collection_id]
         if bookmark.save
             render json: { message: "Bookmark created successfully", bookmark: bookmark }, status: :created
           else
@@ -23,7 +22,6 @@ class Api::V1::BookmarksController < ApplicationController
         if current_bookmark
           current_bookmark.title = params[:bookmark][:title]
           current_bookmark.description = params[:bookmark][:description]
-          current_bookmark.url = params[:bookmark][:url]
           if current_bookmark.save
             render json: { message: "Bookmark Updated successfully", bookmark: current_bookmark }, status: :ok
           else
@@ -46,6 +44,6 @@ class Api::V1::BookmarksController < ApplicationController
 
     private
      def bookmark_params
-        params.require(:bookmark).permit(:url, :title, :description , :collection_id)
+        params.require(:bookmark_params).permit(:url, :title, :description , :collection_id)
      end
 end

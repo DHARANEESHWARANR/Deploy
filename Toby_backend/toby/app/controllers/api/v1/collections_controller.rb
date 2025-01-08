@@ -10,6 +10,16 @@ class Api::V1::CollectionsController < ApplicationController
       render json: { message: "Collection Not Created", collection: collection.errors.full_messages }, status: :unprocessable_entity
     end
   end
+  
+  def show
+     puts params[:id];
+     collection = Collection.find_by(id: params[:id])
+     if collection
+      render json: { message: "Collection Found successfully", collection: collection}, status: :ok
+     else
+      render json: { message: "Collection Not Found successfully"}, status: :not_found
+     end
+  end
 
   def index
     user_id = params[:user_id]
