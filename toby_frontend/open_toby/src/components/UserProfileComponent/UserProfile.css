@@ -1,0 +1,64 @@
+html, body {
+    height: 100%;    /* Make the HTML and body take up the full height of the viewport */
+    margin: 0;       /* Remove default margin */
+  }
+
+.user_profile_page{
+    display: flex;
+    height: 100vh;
+    color: rgb(112, 110, 110);
+    height: 100%;
+}
+
+.user_details_with_logo{
+   border: 2px solid  rgb(204, 191, 191);
+   width: 6%;
+   height: 150vh;
+}
+
+.user_profile_search_spacing{
+    border: 2px solid rgb(204, 191, 191);
+    height: 150vh;
+    width: 15%;
+
+}
+
+.user_profile_collection_page{
+      border: 2px solid rgb(204, 191, 191);
+      height: 150vh;
+      width: 70%;
+}
+
+.user_profile_tabs_page{
+    border: 2px solid rgb(204, 191, 191);
+    height: 150vh;
+    width: 20%;
+}
+
+#my-collection-text{
+    text-align: center;
+}
+
+.initials{
+}
+.initials-h{
+    background-color: #484b48; /* Green background */
+    color: white;
+    padding: 5px;
+    border-radius: 50%; /* Circular logo */
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px; /* Center text vertically */
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.search button {
+    background-color: #ffffff; 
+    color: rgb(122, 116, 116); 
+    font-size: 25px; 
+    border: none; 
+    border-bottom: 2px solid black; 
+    cursor: pointer; 
+}
