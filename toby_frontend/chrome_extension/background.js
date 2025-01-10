@@ -2,7 +2,6 @@
 // Function to collect and store tabs grouped by window
 function collectAndStoreTabsByWindow(excludeTabId = null) {
   chrome.tabs.query({}, (tabs) => {
-      console.log(tabs);
       const tabsByWindow = {};
       tabs.forEach((tab) => {
           if (tab.id !== excludeTabId && tab.title !== "React App" && tab.title !== "Extensions") {
@@ -29,7 +28,6 @@ function collectAndStoreTabsByWindow(excludeTabId = null) {
 }
 
 function refreshTabDetailsByWindow(){
-  console.log("The refresh() is called ");
   chrome.tabs.query({},(tabs)=>{
        chrome.storage.local.get("windowTabs",(data)=>{
            const existingCollection = data.windowTabs || [];
@@ -83,7 +81,6 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
 
 chrome.windows.onCreated.addListener((window) => {
-  console.log("A new window was created:", window);
   // Optionally call a function to collect and store tabs after window is created
   collectAndStoreTabsByWindow();
 });
@@ -91,21 +88,15 @@ chrome.windows.onCreated.addListener((window) => {
 
 //listen for the messages from the content.js
 chrome.runtime.onMessage.addListener((message,sender,sendResponse)=>{
-  console.log("The Received Message is :",message);
   // Handle "getTabs" request
 if (message === "getTabs") {
-  console.log("Getting Storage is Called");
   chrome.storage.local.get("windowTabs", (data) => {
-    console.log(data.windowTabs);
     sendResponse({ windowsAndTabsData: data.windowTabs });
   });
   return true; // Keeps the response channel open for async response
 }
 
 if(message.type === "Remove"){
-  console.log("Hey Finalyy buddy");
-  console.log(message.tab_id);
-  console.log(message.window_id);
   chrome.tabs.remove(message.tab_id, () => {
       if (chrome.runtime.lastError) {
         console.error("Failed to remove tab:", chrome.runtime.lastError.message);
@@ -117,14 +108,12 @@ if(message.type === "Remove"){
   }
 
   if(message.type === "open_all_tabs"){
-     console.log("Message Came sucessfully");
      message.urls.forEach((url)=>{
       chrome.tabs.create({url});
      })
   }
 
   if (message === "remove_tabs_except_current_one") {
-    console.log("Removing all tabs except the current one...");
     chrome.tabs.query({}, (tabs) => {
       chrome.tabs.query({ active: true, currentWindow: true }, (activeTabs) => {
         const activeTabId = activeTabs[0]?.id;
@@ -138,18 +127,13 @@ if(message.type === "Remove"){
   }
 
   if(message.type === "REMOVE_ALL_TABS_IN_THE_TABLIST_USING_WINDOW_ID"){
-    console.log("The Datas in the storge are");
     chrome.storage.local.get("windowTabs",(data)=>{
-      console.log(data.windowTabs);
       var updatedWindowInformation = data.windowTabs;
       if(updatedWindowInformation[message.window_id]){
-        console.log(updatedWindowInformation[message.window_id]);
         updatedWindowInformation[message.window_id].map((tab)=>{
           chrome.tabs.remove(tab.id);
         })
-        console.log("All Removed Successfully");
         delete updatedWindowInformation[message.window_id];
-        console.log("Deleted Successfully");
         chrome.storage.local.set({ windowTabs: updatedWindowInformation }, () => {
           if (chrome.runtime.lastError) {
               console.error("Error refreshing window-tab details:", chrome.runtime.lastError);

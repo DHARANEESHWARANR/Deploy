@@ -1,4 +1,4 @@
-import React, { cloneElement, useState } from 'react';
+import React, { cloneElement, useEffect, useState } from 'react';
 // import './CollectionPage.css';
 import CollectionTabs from './CollectionTabs';
 import axios from 'axios';
@@ -12,7 +12,40 @@ const CollectionList = ({ collections, setCollections, userData }) => {
     const [editId, setEditId] = useState(null); 
     const [editTitle, setEditTitle] = useState(""); 
     const[visible,setVisible] = useState({});
+    const [expandClick,setExpandClick] = useState(0);
+    const [collapeClick,setCollapeClick] = useState(0);
 
+    useEffect(()=>{
+        const initialVisibility = collections.reduce((acc,collection)=>{
+              acc[collection.id] = true
+              return acc
+        },{})
+        setVisible(initialVisibility);
+    },[collections]);
+
+    const handleExpandClick = () =>{
+        if(expandClick == 0){
+            const initialVisibility = collections.reduce((acc,collection)=>{
+                 acc[collection.id] = true
+                return acc
+            },{})
+            setVisible(initialVisibility);
+            setExpandClick(1);
+            setCollapeClick(0);
+        }
+    }
+
+    const handleCollapeClick = () =>{
+        if(collapeClick == 0){
+            const initialVisibility = collections.reduce((acc,collection)=>{
+                 acc[collection.id] = false
+                return acc
+            },{})
+            setVisible(initialVisibility);
+            setCollapeClick(1);
+            setExpandClick(0);
+        }
+    }
     const handleClick = () => {
         clicked === 0 ? setClicked(1) : setClicked(0);
     };
@@ -101,7 +134,7 @@ const CollectionList = ({ collections, setCollections, userData }) => {
             if (message === "OPEN AND CLOSE"){
             window.postMessage({type:"REMOVE_OTHER_TABS"},"*");
             setTimeout(()=>{
-                window.postMessage({type: "OPEN_ALfL_TABS",urls: urls},"*");
+                window.postMessage({type: "OPEN_ALL_TABS",urls: urls},"*");
             },200);
             } 
 
@@ -126,8 +159,8 @@ const CollectionList = ({ collections, setCollections, userData }) => {
             <div className="border w-full h-[75px] pt-6">
              <button className="text-[15px] pl-10 text-[#f65077]">DRAG AND DROP</button>
              <button className="text-[15px] pl-6 text-[#f65077]">TAG FILTER</button>
-             <button className="text-[15px] pl-6 text-[#f65077]">VIEW</button>
-             <button className="text-[15px] pl-6 text-[#f65077]">EXPAND</button>
+             <button onClick={handleExpandClick}className="text-[15px] pl-6 text-[#f65077]">EXPAND</button>
+             <button onClick={handleCollapeClick} className="text-[15px] pl-6 text-[#f65077]">COLLAPSE</button>
              <button onClick={handleClick} className="text-[13px] ml-80 border bg-[#f65077] text-[#ffffff] p-1 rounded-md">+ ADD COLLECTION</button>
             </div>
             {clicked === 1 && (
@@ -161,7 +194,7 @@ const CollectionList = ({ collections, setCollections, userData }) => {
                                     onChange={handleEditChange}
                                 />
                                 <button onClick={(event) => handleEditSubmit(event,collection.id)} >Save</button>
-                                <button onClick={handleEditCancel} className='text-pink-100'>Cancel</button>
+                                <button onClick={handleEditCancel} className='text-white-100'>Cancel</button>
                             </div>
                         ) : (
                             <div className="flex h-[60px] items-center justify w-full">

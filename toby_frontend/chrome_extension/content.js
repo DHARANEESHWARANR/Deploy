@@ -4,8 +4,6 @@ window.addEventListener("message", (event) => {
 
   if (event.data.type === "GET_STORAGE") {
       chrome.runtime.sendMessage("getTabs", (response) => {
-        console.log("The response Came Buddy2:")
-        console.log(response.windowsAndTabsData);
           window.postMessage({ type: "FROM_CONTENT_SCRIPT", data: response.windowsAndTabsData }, "*");
       });
   }
@@ -37,12 +35,8 @@ window.addEventListener("message", (event) => {
 
 chrome.storage.onChanged.addListener((changes, areaName) => {
   if (areaName === "local" && changes.windowTabs) {
-      console.log("Detected change in windowTabs storage:", changes.windowTabs.newValue);
-      
       chrome.storage.local.get("windowTabs", (result) => {
-          console.log("Message Sending updated openTabs data to React app:", result.windowTabs);
           window.postMessage({ type: "FROM_CONTENT_SCRIPT", data: result.windowTabs }, "*");
-          console.log("Sent updated openTabs data to React app:", result.windowTabs);
       });
   }
 });
