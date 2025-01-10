@@ -1,0 +1,76 @@
+/* Tab List Container */
+.tab-list-container {
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 20px auto;
+  overflow: hidden;
+}
+
+/* Title of the Tab List */
+h1 {
+  text-align: center;
+  color: #333;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+/* Styling each Tab Item */
+.tab-item {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  overflow: hidden;
+  white-space: nowrap; /* Prevent text from wrapping */
+  text-overflow: ellipsis; /* Add ellipsis for overflowed text */
+  max-width: 100%;
+}
+
+/* Add hover effect to tab item */
+.tab-item:hover {
+  background-color: #e9ecef;
+  transform: translateX(5px);
+}
+
+/* Tab Favicon Styling */
+.tab-item img {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  margin-right: 12px;
+}
+
+/* Link Styling */
+.tab-item a {
+  text-decoration: none;
+  color: #007bff;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Ensure long titles are truncated with ellipsis */
+  white-space: nowrap; /* Prevent text from wrapping */
+  display: block; /* Ensure the text takes up space and can be truncated */
+  max-width: calc(100% - 36px); /* Ensure the link doesn't overflow the available space */
+}
+
+/* Link hover effect */
+.tab-item a:hover {
+  color: #0056b3;
+}
+
+/* Optional: Add a scrollbar to the tab list */
+.tab-list-container ul {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-left: 0;
+  list-style-type: none;
+  margin-top: 0;
+}
