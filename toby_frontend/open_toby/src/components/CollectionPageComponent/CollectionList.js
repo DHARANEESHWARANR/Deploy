@@ -4,8 +4,8 @@ import CollectionTabs from './CollectionTabs';
 import axios from 'axios';
 
 
-const CollectionList = ({ collections, setCollections, userData }) => {
-    const user_id = userData.user.id;
+const CollectionList = ({ collections, setCollections, userData ,activeUser}) => {
+    const user_id = activeUser.user_id;
 
     const [clicked, setClicked] = useState(0);
     const [collectionTitle, setCollectionTitle] = useState("");
@@ -155,7 +155,7 @@ const CollectionList = ({ collections, setCollections, userData }) => {
     };
 
     return (
-        <div className="divforcollectionlist">
+        <div className="">
             <div className="border w-full h-[75px] pt-6">
              <button className="text-[15px] pl-10 text-[#f65077]">DRAG AND DROP</button>
              <button className="text-[15px] pl-6 text-[#f65077]">TAG FILTER</button>
@@ -182,8 +182,8 @@ const CollectionList = ({ collections, setCollections, userData }) => {
                     </button>
                 </form>
             )}
-            <div className='h-30'>
-            <ul className="collection-list">
+            <div className='overflow-y-auto h-screen max-h-[calc(100vh-100px)]'>
+            <ul className="">
                 {collections && collections.map((collection) => (
                     <li key={collection.id} className="collection-item snap-y">
                         {editId === collection.id ? (

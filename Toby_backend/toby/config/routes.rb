@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   devise_for :auth_users, controllers: { omniauth_callbacks: 'auth_users/omniauth_callbacks' }
-  
+  resources :toby_users, only: [:create, :show] do
+    collection do
+      get :search
+    end
+  end
   namespace :api do
     namespace :v1 do
       resources :users

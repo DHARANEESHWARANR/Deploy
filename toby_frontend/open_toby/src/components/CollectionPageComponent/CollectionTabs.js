@@ -40,7 +40,7 @@ const CollectionTabs = ({collection_id}) =>{
         {allTabs && allTabs.map((tab) => (
           <li
           key={tab.id}
-          className="tab-item shadow-md rounded-lg p-4 flex flex-col items-center space-y-2 hover:border-[#B7B7CE]  hover:translate-y-1 transition-transform w-[250px] h-[105px] bg-[#ffffff]"
+          className="tab-item shadow-md rounded-lg p-4 flex flex-col items-center space-y-2 hover:border-[#B7B7CE]  hover:translate-y-1 transition-transform w-[250px] h-[105px] bg-[#ffffff] relative"
         >
           <div className='flex'>
           <img

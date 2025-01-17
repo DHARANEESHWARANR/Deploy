@@ -22,8 +22,15 @@ const UserLoginForm = () =>{
             password: formData.password
           });
           setUsersData(response.data.user.id);
-          localStorage.setItem('user_id',response.data.user.id);
-          localStorage.setItem('user_name',response.data.user.first_name);
+          // localStorage.setItem('user_id',response.data.user.id);
+          // localStorage.setItem('user_name',response.data.user.first_name);
+          let toby_users = [];
+          const admin_user = {
+            'user_id': response.data.user.id,
+            'user_name': response.data.user.first_name
+          }
+          toby_users.push(admin_user);
+          localStorage.setItem("Toby_users",JSON.stringify(toby_users));
           navigate('/user_profile', { state: { userData: response.data } });
         } catch(error) {
           if(error.response) {

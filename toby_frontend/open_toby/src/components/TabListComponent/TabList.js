@@ -3,15 +3,16 @@ import React, { cloneElement, useContext, useEffect, useState } from "react";
 import { CollectionsContext } from "../../contexts/CollectionsContext";
 import { UserContext } from "../../contexts/UsersContext";
 import axios from "axios";
-import { use } from "react";
-function MyComponent() {
+const MyComponent= ({activeUser,setActiveUser,onUserSelect}) => {
   const [storedData, setStoredData] = useState({});
   const {collections,setCollections} = useContext(CollectionsContext);
-  const {usersData,setUsersData} = useContext(UserContext);
-  const user_id = parseInt(localStorage.getItem('user_id'),10);
+  // const {usersData,setUsersData} = useContext(UserContext);
+  // const user_id = parseInt(localStorage.getItem('user_id'),10);
+  const user_id = activeUser.user_id;
   const [dropDownResult,setDropDownReuslt] = useState({});
 
   useEffect(() => {
+    console.log("activeUser:",activeUser);
     // Listen for messages from content script
     const handleMessage = (event) => {
       if (event.source === window && event.data.type === "FROM_CONTENT_SCRIPT") {
@@ -76,6 +77,7 @@ function MyComponent() {
       if(response.data && response.data.collection){
         const new_collection = response.data.collection;
         setCollections((prev_collections)=>[new_collection,...prev_collections]);
+        setActiveUser(activeUser.user_id);
         window.postMessage({type: "REMOVE_OTHER_TABS"},"*");
         setTimeout(()=>{
           const tempStoreData = storedData;
@@ -96,8 +98,14 @@ function MyComponent() {
         return updatedResult;
       })
   }
+
+  const handleUpateUserNames = async(event,userData)=>{
+    event.preventDefault();
+    onUserSelect(userData);
+    }
+
   return (
-    <div className="w-full border shadow-lg p-4">
+    <div className="w-full border shadow-lg p-4 overflow-y-auto h-screen max-h-[calc(100vh-50px)]">
       {storedData && Object.keys(storedData).length > 0 ? (
         <div>
           {Object.keys(storedData).map((windowId, index) => (
@@ -112,7 +120,7 @@ function MyComponent() {
               </div>
               <ul className="mt-2">
                 {dropDownResult[windowId] && storedData[windowId].map((tab) => (
-                  <li key={tab.id} className="tab-item flex border mx-6 my-3 mb-[15px] p-2 items-center rounded-lg shadow-lg hover:border-[#B7B7CE] hover:bg-[#F5F5FB] hover:translate-y-1 transition-transform">
+                  <li key={tab.id} className="tab-item flex border mx-6 my-3 mb-[15px] p-2 items-center rounded-lg shadow-lg hover:border-[#B7B7CE] hover:bg-[#F5F5FB] hover:translate-y-1 transition-transform relative">
                            <img src={tab.favicon_url} alt={`${tab.title} icon`} className="w-5 h-5 object-contain" />
                            <a href={tab.url} target="_blank" rel="noopener noreferrer" className="pl-2 text-[#1E1E26]">
                            {tab.title && tab.title.slice(0, 12)} 

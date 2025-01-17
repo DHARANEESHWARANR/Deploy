@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-// import './SearchPageComponent.css';
+import './SearchPageComponent.css';
 import axios from 'axios';
 
 const SearchPageComponent = () => {

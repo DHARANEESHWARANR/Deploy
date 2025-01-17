@@ -33,10 +33,7 @@ const HomePage = () => {
             onLoginFailure={handleLoginFailure}
           />
         </div>
-
-        {/* Optional Form Page */}
         <FormPage />
-
         <div className="footer-content">
           <p>By signing up with Toby, you acknowledge that you have read and</p>
           <p>agree to all applicable Terms of <u>Service</u> and our <u>Privacy policy</u></p>
