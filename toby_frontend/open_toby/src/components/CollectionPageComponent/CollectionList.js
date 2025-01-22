@@ -164,7 +164,7 @@ const CollectionList = ({ collections, setCollections, userData ,activeUser}) =>
              <button onClick={handleClick} className="text-[13px] ml-80 border bg-[#f65077] text-[#ffffff] p-1 rounded-md">+ ADD COLLECTION</button>
             </div>
             {clicked === 1 && (
-                <form onSubmit={handleSubmit} className="collectionTitleForm">
+                <form onSubmit={handleSubmit} className="collectionTitleForm  p-4 bg-white rounded-lg shadow-lg mt-4 mx-10">
                     <div className="collectionTitleInFormDiv">
                         <input
                             type="text"
@@ -172,12 +172,13 @@ const CollectionList = ({ collections, setCollections, userData ,activeUser}) =>
                             value={collectionTitle}
                             onChange={handleChange}
                             required
+                            className="w-full p-2 border border-gray-300 rounded-md text-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-500"
                         />
                     </div>
-                    <button onClick={handleClick} className="collectionCancelInFormButton">
+                    <button onClick={handleClick} className="collectionCancelInFormButton text-gray-500 hover:text-gray-700 font-semibold py-1 px-3 rounded-md border border-gray-300 hover:bg-gray-100 transition duration-200">
                         Cancel
                     </button>
-                    <button type="submit" className="collectionSaveInFormButton">
+                    <button type="submit" className="collectionSaveInFormButton bg-pink-500 text-white font-semibold py-1 px-4 rounded-md hover:bg-pink-600 transition duration-200">
                         Save
                     </button>
                 </form>
@@ -192,9 +193,11 @@ const CollectionList = ({ collections, setCollections, userData ,activeUser}) =>
                                     type="text"
                                     value={editTitle}
                                     onChange={handleEditChange}
+                                    required
+                                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
                                 />
-                                <button onClick={(event) => handleEditSubmit(event,collection.id)} >Save</button>
-                                <button onClick={handleEditCancel} className='text-white-100'>Cancel</button>
+                                <button onClick={(event) => handleEditSubmit(event,collection.id)} className='text-gray-500 hover:text-gray-700 font-semibold py-1 px-3 rounded-md border border-gray-300 hover:bg-gray-100 transition duration-200'>Save</button>
+                                <button onClick={handleEditCancel} className='bg-pink-500 text-white font-semibold py-1 px-4 rounded-md hover:bg-pink-600 transition duration-200'>Cancel</button>
                             </div>
                         ) : (
                             <div className="flex h-[60px] items-center justify w-full">
