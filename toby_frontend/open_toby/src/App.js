@@ -7,6 +7,7 @@ import UserLoginForm from './components/UserLoginFormComponent/UserLoginForm';
 import { UserProvider } from './contexts/UsersContext';
 import { CollectionsProvider } from './contexts/CollectionsContext';
 import SearchPageComponent from './components/SearchPageComponent/SearchPageComponent';
+import NewUser from './components/NewUserComponent/NewUser';
 function App() {
   return (
     <GoogleOAuthProvider clientId="303825068922-0i5n5e3p1i1ecto6brf792tpkchjtnei.apps.googleusercontent.com">
@@ -23,6 +24,7 @@ function App() {
           <Route path="/user_profile" element={<UserProfile/>} />
           <Route path="/login" element={<UserLoginForm/>} />
           <Route path="/searchPage" element={<SearchPageComponent/>} />
+          <Route path="/newuser" element={<NewUser/>}/>
         </Routes>
       </Router>
       </CollectionsProvider>
