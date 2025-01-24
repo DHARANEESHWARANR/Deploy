@@ -10,33 +10,20 @@ class TobyUsersController < ApplicationController
     end
 
     def search
-        # user = TobyUser.where(admin_user_id: params[:admin_user_id]);
-        # p user
-        # puts "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
-        # puts "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
-        # puts "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
-        # puts params[:admin_user_id];
-        # p params[:admin_user_id];
-        # puts "Hello"
-        # puts "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
-        # puts "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
-        # puts "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
-        # if user.any?
-        #     puts "User Found successfully"
-        #     puts "77777777777777777777777"
-        #     puts "77777777777777777777777"
-        #     puts "77777777777777777777777"
-        #     p user
-        #     puts "77777777777777777777777"
-        #     puts "77777777777777777777777"
-        #     render json:{message: "User foun Sucessfully", user: user};
-        # else
-        #     render json: { message: "No users found for the given admin_id" }, status: :not_found
-        # end
         user = TobyUser.where(admin_user_id: params[:admin_user_id]);
         if user
              render json:{message:"Hello", admin_id: params[:admin_user_id] , user: user}
         end
+    end
+
+    def destroy
+        user = TobyUser.find_by(user_id: params[:id]);
+        if user
+            user.destroy
+            render json:{message: "User Deleted Successfully"}, status: :ok
+          else
+            render json:{message: "User Not Found"} , status: :not_found
+          end
     end
 
     private
