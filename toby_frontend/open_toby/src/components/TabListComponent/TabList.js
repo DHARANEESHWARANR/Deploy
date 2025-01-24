@@ -12,7 +12,7 @@ const MyComponent= ({activeUser,setActiveUser,onUserSelect}) => {
   const [dropDownResult,setDropDownReuslt] = useState({});
 
   useEffect(() => {
-    console.log("activeUser:",activeUser);
+    // console.log("activeUser:",activeUser);
     // Listen for messages from content script
     const handleMessage = (event) => {
       if (event.source === window && event.data.type === "FROM_CONTENT_SCRIPT") {
@@ -77,7 +77,10 @@ const MyComponent= ({activeUser,setActiveUser,onUserSelect}) => {
       if(response.data && response.data.collection){
         const new_collection = response.data.collection;
         setCollections((prev_collections)=>[new_collection,...prev_collections]);
-        setActiveUser(activeUser.user_id);
+        setActiveUser({
+          ...activeUser,
+          lastUpdated: new Date().getTime(), // Add a timestamp to force state update
+        });
         window.postMessage({type: "REMOVE_OTHER_TABS"},"*");
         setTimeout(()=>{
           const tempStoreData = storedData;
