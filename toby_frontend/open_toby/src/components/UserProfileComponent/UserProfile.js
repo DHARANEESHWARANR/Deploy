@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 const UserProfile = () => {
   const location = useLocation();
   const { userData } = location.state || {}; // Access userData
+  console.log(userData);
   const navigate = useNavigate();
   const current_user_data = {
     "user_name": userData.user.first_name,
@@ -17,8 +18,6 @@ const UserProfile = () => {
   const [activeUser,setActiveUser] = useState(current_user_data? current_user_data: {});
 
   const updateCurrentAvctiveUser = async(userDetails)=>{
-    console.log("Hello I am clicked");
-    console.log("The response is :",userDetails);
     setActiveUser(userDetails);
   }
   const handleSignOutUser = async(event)=>{
@@ -26,7 +25,6 @@ const UserProfile = () => {
        try{
         const user_name = localStorage.getItem("user_id");
         localStorage.removeItem("user_id");
-        console.log("The User Id Removed");
         navigate("/");
 
        }
@@ -36,6 +34,7 @@ const UserProfile = () => {
   }
 
   useEffect(()=>{
+    console.log("Active User Updated");
     console.log("The active user in the profile page is:",activeUser);
   },[activeUser]);
 
@@ -43,13 +42,13 @@ const UserProfile = () => {
     <div className="flex h-screen">
       {/* Column 1: User Details with Logo */}
       <div className="basis-[5%] border">
-        <UserProfileLogo userData={userData} onUserSelect = {updateCurrentAvctiveUser}/>
+        <UserProfileLogo key={activeUser.user_id} userData={userData} setActiveUser={setActiveUser} activeUser={activeUser} onUserSelect = {updateCurrentAvctiveUser}/>
       </div>
 
       {/* Column 2: User Profile Search */}
       <div className="basis-[18%] border">
         <h1 className="text-[ #565250 ] text-[20px] border pl-3 pt-1.5 pb-1">Sedin</h1>
-        <UserProfileSearch key={activeUser.user_id} activeUser={activeUser} /> 
+        <UserProfileSearch key={activeUser.last_updated} activeUser={activeUser} setActiveUser={setActiveUser}/> 
       </div>
 
       {/* Column 3: Collections Page */}

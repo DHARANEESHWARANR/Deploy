@@ -1,13 +1,15 @@
 import React , {useState,useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const UserProfileSearch = () =>{
+const UserProfileSearch = ({activeUser,setActiveUser}) =>{
 
 
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate('/searchPage');
+       if(activeUser.user_id){
+        navigate('/searchPage', { state: { userId: activeUser.user_id } });
+       }
     };
     
       return(
