@@ -69,6 +69,9 @@ const NewUser = () => {
     }
   };
 
+  const handleGoBack = async()=>{
+    navigate(-1);
+  }
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white">
       {/* Fancy Header Section */}
@@ -148,6 +151,14 @@ const NewUser = () => {
             Submit
           </button>
         </form>
+      </div>
+      <div className="sign-out-container fixed bottom-6 right-6">
+        <button
+          onClick={(event)=> handleGoBack(event)}
+          className="bg-black-500 text-white py-2 px-6 rounded-lg shadow-md hover:bg-red-600 transition-all duration-300 transform hover:scale-105"
+        >
+          Go Back
+        </button>
       </div>
     </div>
   );

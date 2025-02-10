@@ -18,26 +18,9 @@ const HomePage = () => {
   };
 
   return (
-    <div className="signup_page_left_side">
+    <div>
       <div>
-        <img src={img1} alt="Sign up" />
-      </div>
-
-      <div className="signup_page_right_side">
-        <h1 id="header_1">Sign up with Toby</h1>
-        <h1 id="header_2">Already have an account?<Link to="/login">Log in</Link></h1>
-        {/* Google login button */} 
-        <div className="google_button">
-          <GoogleLoginButton
-            onLoginSuccess={handleLoginSuccess}
-            onLoginFailure={handleLoginFailure}
-          />
-        </div>
         <FormPage />
-        <div className="footer-content">
-          <p>By signing up with Toby, you acknowledge that you have read and</p>
-          <p>agree to all applicable Terms of <u>Service</u> and our <u>Privacy policy</u></p>
-        </div>
       </div>
     </div>
   );

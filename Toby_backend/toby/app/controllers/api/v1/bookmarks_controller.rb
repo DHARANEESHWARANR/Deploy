@@ -1,11 +1,16 @@
 class Api::V1::BookmarksController < ApplicationController
     def create
-        bookmark = Bookmark.new(bookmark_params)
+      collection = Collection.find_by(id: params[:collection_id]);
+      if collection
+        bookmark  = collection.bookmarks.new(bookmark_params);
         if bookmark.save
-            render json: { message: "Bookmark created successfully", bookmark: bookmark }, status: :created
-          else
-            render json: { message: "Collection Not Created", bookmark: bookmark.errors.full_messages }, status: :unprocessable_entity
-          end
+          render json: {message: "BoookMarks Created Sucessfully" , bookmark: bookmark} , status: :ok
+        else
+          render json: { message: "Failed to Create BookMark", errors: bookmark.errors.full_messages }, status: :unprocessable_entity
+        end
+      else
+        render json: {message: "Collection is Not Found"}, status: :not_found
+      end
     end
     
     def index

@@ -7,7 +7,7 @@ class Api::V1::CollectionsController < ApplicationController
     if collection.save
       render json: { message: "Collection created successfully", collection: collection }, status: :created
     else
-      render json: { message: "Collection Not Created", collection: collection.errors.full_messages }, status: :unprocessable_entity
+      render json: { message: "C `ollection Not Created", collection: collection.errors.full_messages }, status: :unprocessable_entity
     end
   end
   

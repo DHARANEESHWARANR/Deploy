@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from "react";
 import "./SearchPageComponent.css";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation,useNavigate } from "react-router-dom";
+import { useCollectionId } from "../../contexts/CollectionIdContext";
+import { useBookMarkId } from "../../contexts/BookmarkIdContext";
 
 const SearchPageComponent = ({ activeUser, setActiveUser }) => {
   const location = useLocation();
+  const {collectionId,setCollectionId} = useCollectionId();
+  const {bookMarkId,setBookMarkId} = useBookMarkId();
   const user_id = location.state;
+  const navigate = useNavigate();
+
   const [searchTitle, setSearchTitle] = useState("");
+  const [searchRequestNamer, setSearchRequestNamer] = useState("all");
   const [userId, setUserId] = useState(null);
   const [userCollections, setUserCollections] = useState([]);
   const [userTabs, setUserTabs] = useState([]);
-  const [searchRequestNamer, setSearchRequestNamer] = useState("all");
   const [filteredData, setFilteredData] = useState([]);
   const [totalMatches, setTotalMatches] = useState(0);
 
@@ -63,8 +69,8 @@ const SearchPageComponent = ({ activeUser, setActiveUser }) => {
       if (searchRequestNamer === "collections") {
         filtered = userCollections.filter(
           (collection) =>
-            collection.title.toLowerCase().includes(searchTitle.toLowerCase()) ||
-            collection.description.toLowerCase().includes(searchTitle.toLowerCase())
+            collection?.title?.toLowerCase().includes(searchTitle.toLowerCase()) ||
+            collection?.description?.toLowerCase().includes(searchTitle.toLowerCase())
         );
       } else if (searchRequestNamer === "tabs") {
         filtered = userTabs.filter((tab) =>
@@ -73,8 +79,8 @@ const SearchPageComponent = ({ activeUser, setActiveUser }) => {
       } else {
         const collectionsFiltered = userCollections.filter(
           (collection) =>
-            collection.title.toLowerCase().includes(searchTitle.toLowerCase()) ||
-            collection.description.toLowerCase().includes(searchTitle.toLowerCase())
+            collection?.title?.toLowerCase().includes(searchTitle.toLowerCase()) ||
+            collection?.description?.toLowerCase().includes(searchTitle.toLowerCase())
         );
 
         const tabsFiltered = userTabs.filter((tab) =>
@@ -93,6 +99,24 @@ const SearchPageComponent = ({ activeUser, setActiveUser }) => {
     const types = { Collection: "collections", Bookmarks: "tabs", All: "all" };
     setSearchRequestNamer(types[type] || "all");
   };
+
+  const handleSelectionClick = async(event,item)=>{
+      event.preventDefault();
+      console.log(item);
+      if(item.user_id && item.id){
+      setCollectionId(item.id);
+      navigate('/user_profile', { state: { activeUserId: user_id } });
+      }
+      else if(item.collection_id){
+        console.log("The Collection Id is:",item.collection_id);
+        setBookMarkId(item.id);
+        setCollectionId(item.collection_id);
+        navigate('/user_profile', { state: { activeUserId: user_id } }); 
+      }
+  }
+  const handleGoBack = async() =>{
+           navigate(-1);
+  }
 
   return (
     <div className="search-page bg-gradient-to-r from-purple-300 via-pink-200 to-blue-300 min-h-screen p-8 animate-fadeIn">
@@ -131,10 +155,11 @@ const SearchPageComponent = ({ activeUser, setActiveUser }) => {
         {filteredData.length > 0 ? (
           filteredData.map((item, index) => (
             <div
-              key={index}
+              key={index.id}
               className="result-item bg-gray-50 shadow-md rounded-lg p-4 mb-4 hover:shadow-lg transition-transform transform hover:scale-105 animate-fadeIn"
+              onClick={(event)=>handleSelectionClick(event,item)}
             >
-              <h3 className="text-pink-600 font-semibold text-lg">{item.title || "Untitled"}</h3>
+              <h2 className="text-gray-900 font-semibold text-lg">{item.title || "Untitled"}</h2>
               {item.description && (
                 <p className="text-gray-600 text-sm mt-1">{item.description}</p>
               )}
@@ -150,6 +175,14 @@ const SearchPageComponent = ({ activeUser, setActiveUser }) => {
         </p>
       </div>
     </div>
+    <div className="sign-out-container fixed bottom-6 right-6">
+        <button
+          onClick={(event)=> handleGoBack(event)}
+          className="bg-black-500 text-white py-2 px-6 rounded-lg shadow-md hover:bg-black-600 transition-all duration-300 transform hover:scale-105"
+        >
+          Go Back
+        </button>
+      </div>
   </div>
   
   );

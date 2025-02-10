@@ -4,7 +4,7 @@ function collectAndStoreTabsByWindow(excludeTabId = null) {
   chrome.tabs.query({}, (tabs) => {
       const tabsByWindow = {};
       tabs.forEach((tab) => {
-          if (tab.id !== excludeTabId && tab.title !== "React App" && tab.title !== "Extensions") {
+          if (tab.id !== excludeTabId && tab.title !== "React App" && tab.title !== "Extensions" && tab.title !== "newtab") {
               if (!tabsByWindow[tab.windowId]) {
                   tabsByWindow[tab.windowId] = [];
               }
@@ -73,6 +73,16 @@ chrome.tabs.onCreated.addListener((tab)=>{
   collectAndStoreTabsByWindow(tab.id);
 })
 
+let openingMultipleTabs = false; 
+
+chrome.tabs.onCreated.addListener((tab) => {
+  if (!openingMultipleTabs && (tab.pendingUrl === "chrome://newtab/" || !tab.url)) {
+    if (!tab.pendingUrl?.startsWith("chrome://extensions/")) {
+      chrome.tabs.update(tab.id, { url: "http://localhost:3002/user_profile" });
+    }
+  }
+});
+
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === "complete" && tab.url && tab.title) {
       refreshTabDetailsByWindow();
@@ -107,10 +117,20 @@ if(message.type === "Remove"){
 
   }
 
-  if(message.type === "open_all_tabs"){
-     message.urls.forEach((url)=>{
-      chrome.tabs.create({url});
-     })
+  if (message.type === "open_all_tabs") {
+    openingMultipleTabs = true; // Set flag before opening multiple tabs
+
+    let promises = message.urls.map((url) => {
+      return new Promise((resolve) => {
+        chrome.tabs.create({ url }, resolve);
+      });
+    });
+
+    Promise.all(promises).then(() => {
+      setTimeout(() => {
+        openingMultipleTabs = false; // Reset flag after batch operation
+      }, 1000);
+    });
   }
 
   if (message === "remove_tabs_except_current_one") {

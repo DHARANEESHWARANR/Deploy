@@ -22,6 +22,9 @@ html, body {
     width: 15%;
 
 }
+.font_custom{
+    background: #000;
+}
 
 .user_profile_collection_page{
       border: 2px solid rgb(204, 191, 191);

@@ -5,14 +5,18 @@ import HomePage from './components/HomePageComponent/HomePage';
 import UserProfile from './components/UserProfileComponent/UserProfile';
 import UserLoginForm from './components/UserLoginFormComponent/UserLoginForm';
 import { UserProvider } from './contexts/UsersContext';
-import { CollectionsProvider } from './contexts/CollectionsContext';
 import SearchPageComponent from './components/SearchPageComponent/SearchPageComponent';
 import NewUser from './components/NewUserComponent/NewUser';
+import { CollectionIdProvider } from './contexts/CollectionIdContext';
+import { BookmarkIdProvider } from './contexts/BookmarkIdContext';
+import { SelectionProvider } from './contexts/SelectionContext';
 function App() {
   return (
-    <GoogleOAuthProvider clientId="303825068922-0i5n5e3p1i1ecto6brf792tpkchjtnei.apps.googleusercontent.com">
+    // <GoogleOAuthProvider clientId="303825068922-0i5n5e3p1i1ecto6brf792tpkchjtnei.apps.googleusercontent.com">
       <UserProvider>
-      <CollectionsProvider>
+        <SelectionProvider>
+      <CollectionIdProvider>
+      <BookmarkIdProvider>
       <Router
         future={{
           v7_startTransition: true,
@@ -27,9 +31,11 @@ function App() {
           <Route path="/newuser" element={<NewUser/>}/>
         </Routes>
       </Router>
-      </CollectionsProvider>
+      </BookmarkIdProvider>
+       </CollectionIdProvider>
+       </SelectionProvider>
       </UserProvider>
-    </GoogleOAuthProvider>
+    // </GoogleOAuthProvider>
   );
 }
 

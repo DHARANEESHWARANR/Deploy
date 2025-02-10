@@ -12,6 +12,7 @@ Rails.application.routes.draw do
         resources :bookmarks
       end
       post 'login', to: 'sessions#create' # Custom route for login
+      post 'stared', to: 'stares#modify' # custom route for staring
     end
   end
 

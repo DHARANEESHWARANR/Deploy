@@ -1,18 +1,12 @@
 
-import React, { cloneElement, useContext, useEffect, useState } from "react";
-import { CollectionsContext } from "../../contexts/CollectionsContext";
-import { UserContext } from "../../contexts/UsersContext";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 const MyComponent= ({activeUser,setActiveUser,onUserSelect}) => {
   const [storedData, setStoredData] = useState({});
-  const {collections,setCollections} = useContext(CollectionsContext);
-  // const {usersData,setUsersData} = useContext(UserContext);
-  // const user_id = parseInt(localStorage.getItem('user_id'),10);
   const user_id = activeUser.user_id;
   const [dropDownResult,setDropDownReuslt] = useState({});
 
   useEffect(() => {
-    // console.log("activeUser:",activeUser);
     // Listen for messages from content script
     const handleMessage = (event) => {
       if (event.source === window && event.data.type === "FROM_CONTENT_SCRIPT") {
@@ -39,10 +33,7 @@ const MyComponent= ({activeUser,setActiveUser,onUserSelect}) => {
       });
       setDropDownReuslt(Up);
 
-    } 
-    // else {
-    //   console.log("Failure");
-    // }
+    }
   }, [storedData]);
 
   const handleTabsDelete = async (event, tab_id, window_id) => {
@@ -76,7 +67,7 @@ const MyComponent= ({activeUser,setActiveUser,onUserSelect}) => {
       const response = await axios.post('http://localhost:3001/api/v1/collections', payload);
       if(response.data && response.data.collection){
         const new_collection = response.data.collection;
-        setCollections((prev_collections)=>[new_collection,...prev_collections]);
+        // setCollections((prev_collections)=>[new_collection,...prev_collections]);
         setActiveUser({
           ...activeUser,
           lastUpdated: new Date().getTime(), // Add a timestamp to force state update
@@ -94,18 +85,18 @@ const MyComponent= ({activeUser,setActiveUser,onUserSelect}) => {
     }
   }
 
-  const handleDropDownOfEachWindows = async(event,window_id)=>{
-      setDropDownReuslt((prevResult)=>{
-        const updatedResult = {...prevResult};
-        updatedResult[window_id] = !updatedResult[window_id];
-        return updatedResult;
-      })
-  }
+  // const handleDropDownOfEachWindows = async(event,window_id)=>{
+  //     setDropDownReuslt((prevResult)=>{
+  //       const updatedResult = {...prevResult};
+  //       updatedResult[window_id] = !updatedResult[window_id];
+  //       return updatedResult;
+  //     })
+  // }
 
-  const handleUpateUserNames = async(event,userData)=>{
-    event.preventDefault();
-    onUserSelect(userData);
-    }
+  // const handleUpateUserNames = async(event,userData)=>{
+  //   event.preventDefault();
+  //   onUserSelect(userData);
+  //   }
 
   return (
     <div className="w-full border shadow-lg p-4 overflow-y-auto h-screen max-h-[calc(100vh-50px)]">
