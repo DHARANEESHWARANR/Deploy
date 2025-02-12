@@ -59,7 +59,8 @@ const UserProfile = () => {
   useEffect(()=>{
     const fetchCollections = async() =>{
            try{
-               const collection_response = await axios.get("http://localhost:3001/api/v1/collections",{
+              const serverHost = process.env.REACT_APP_SERVER_HOST;
+               const collection_response = await axios.get(`http://${process.env.REACT_APP_SERVER_HOST}:3001/api/v1/collections`,{
                 params:{
                     user_id: activeUser.user_id
                 }

@@ -4,6 +4,7 @@ import img1 from '../../assets/edit.png';
 import { useBookMarkId } from "../../contexts/BookmarkIdContext";
 // Main CollectionTabs component
 const CollectionTabs = ({ collection_id }) => {
+  const serverHost = process.env.REACT_APP_SERVER_HOST;
   const [allTabs, setAllTabs] = useState([]);
   const [isEditing, setIsEditing] = useState(false); // To track if the modal is open
   const [currentTab, setCurrentTab] = useState(null); // Store the current tab being edited
@@ -14,7 +15,7 @@ const CollectionTabs = ({ collection_id }) => {
   useEffect(() => {
     const fetchTabs = async () => {
       try {
-        const tabs_response = await axios.get(`http://localhost:3001/api/v1/collections/${collection_id}/bookmarks`);
+        const tabs_response = await axios.get(`http://${process.env.REACT_APP_SERVER_HOST}:3001/api/v1/collections/${collection_id}/bookmarks`);
         setAllTabs(tabs_response.data.bookmarks);
       } catch (error) {
         console.log("Error", error);
@@ -33,7 +34,7 @@ const CollectionTabs = ({ collection_id }) => {
   // },[allTabs])
   const handleTabsDeletion = async (bookmark_id) => {
     try {
-      const response = await axios.delete(`http://localhost:3001/api/v1/collections/${collection_id}/bookmarks/${bookmark_id}`);
+      const response = await axios.delete(`http://${process.env.REACT_APP_SERVER_HOST}:3001/api/v1/collections/${collection_id}/bookmarks/${bookmark_id}`);
       const updated_tabs = allTabs.filter((tab) => tab.id !== bookmark_id);
       setAllTabs(updated_tabs);
     } catch (error) {
@@ -59,7 +60,7 @@ const CollectionTabs = ({ collection_id }) => {
   const handleSaveChanges = async () => {
     try {
       const updatedTab = { ...currentTab, title: editedTitle, url: editedUrl };
-      await axios.put(`http://localhost:3001/api/v1/collections/${collection_id}/bookmarks/${currentTab.id}`, updatedTab);
+      await axios.put(`http://${process.env.REACT_APP_SERVER_HOST}:3001/api/v1/collections/${collection_id}/bookmarks/${currentTab.id}`, updatedTab);
       
       const updatedTabs = allTabs.map((tab) => 
         tab.id === currentTab.id ? { ...tab, title: editedTitle, url: editedUrl } : tab

@@ -3,6 +3,7 @@ import axios from "axios";
 import CollectionTabs from "../CollectionPageComponent/CollectionTabs";
 import img1 from '../../assets/edit.png';
 const StaredCollections = ({activeUser}) =>{
+  const serverHost = process.env.REACT_APP_SERVER_HOST;
     const [StaredCollection,setStaredCollection] = useState([]);
     const [editId, setEditId] = useState(null);
     const [editTitle, setEditTitle] = useState("");
@@ -11,7 +12,7 @@ const StaredCollections = ({activeUser}) =>{
 useEffect(()=>{
     const fetchCollections = async() =>{
            try{
-               const collection_response = await axios.get("http://localhost:3001/api/v1/collections",{
+               const collection_response = await axios.get(`http://${process.env.REACT_APP_SERVER_HOST}:3001/api/v1/collections`,{
                 params:{
                     user_id: activeUser.user_id
                 }
@@ -46,10 +47,11 @@ const handleEditChange = (event) => {
     event.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:3001/api/v1/collections/${collection_id}`,
+        `http://${process.env.REACT_APP_SERVER_HOST}:3001/api/v1/collections/${collection_id}`,
         {
           collection: {
             title: editTitle,
+
           },
         }
       );
@@ -80,7 +82,7 @@ const handleEditChange = (event) => {
   const handleGetAllTabs = async (collection_id, message) => {
     try {
       const response = await axios.get(
-        `http://localhost:3001/api/v1/collections/${collection_id}/bookmarks`
+        `http://${process.env.REACT_APP_SERVER_HOST}:3001/api/v1/collections/${collection_id}/bookmarks`
       );
       const urls = [];
       response.data.bookmarks.map((tabs) => {

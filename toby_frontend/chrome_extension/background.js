@@ -77,8 +77,8 @@ let openingMultipleTabs = false;
 
 chrome.tabs.onCreated.addListener((tab) => {
   if (!openingMultipleTabs && (tab.pendingUrl === "chrome://newtab/" || !tab.url)) {
-    if (!tab.pendingUrl?.startsWith("chrome://extensions/")) {
-      chrome.tabs.update(tab.id, { url: "http://localhost:3002/user_profile" });
+    if (!tab.pendingUrl?.startsWith("chrome://extensions/") && !tab.pendingUrl?.startsWith("https://help.gettoby.com/support/home")) {
+      chrome.tabs.update(tab.id, { url: "http://192.168.0.101:3002/user_profile" });
     }
   }
 });
@@ -98,6 +98,7 @@ chrome.windows.onCreated.addListener((window) => {
 
 //listen for the messages from the content.js
 chrome.runtime.onMessage.addListener((message,sender,sendResponse)=>{
+  console.log("the message received is:",message)
   // Handle "getTabs" request
 if (message === "getTabs") {
   chrome.storage.local.get("windowTabs", (data) => {
@@ -145,7 +146,9 @@ if(message.type === "Remove"){
       });
     });
   }
-
+  if(message.type === "Open The Url of Official Toby Bhiceps"){
+    chrome.tabs.create({url: "https://help.gettoby.com/support/home"});
+  }
   if(message.type === "REMOVE_ALL_TABS_IN_THE_TABLIST_USING_WINDOW_ID"){
     chrome.storage.local.get("windowTabs",(data)=>{
       var updatedWindowInformation = data.windowTabs;

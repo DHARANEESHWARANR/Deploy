@@ -30,6 +30,11 @@ window.addEventListener("message", (event) => {
     chrome.runtime.sendMessage({type:"REMOVE_ALL_TABS_IN_THE_TABLIST_USING_WINDOW_ID",window_id: event.data.window_id});
   }
 
+  if(event.data.type === "Irungha Bhai"){
+    console.log("Irungha Bhai is called buddy");
+    chrome.runtime.sendMessage({type:"Open The Url of Official Toby Bhiceps"});
+  }
+
 
 });
 

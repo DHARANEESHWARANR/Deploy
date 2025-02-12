@@ -21,7 +21,8 @@ const FormPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3001/api/v1/users", {
+      const serverHost = process.env.REACT_APP_SERVER_HOST;
+      const response = await axios.post(`http://${process.env.REACT_APP_SERVER_HOST}:3001/api/v1/users`, {
         user: formData
       });
       setUsersData(response.data.user.id);

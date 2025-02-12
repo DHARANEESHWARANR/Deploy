@@ -1,8 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { useSelection } from '../../contexts/SelectionContext';
+import { useState } from 'react';
 const UserProfileSearch = ({ activeUser, setActiveUser }) => {
   const navigate = useNavigate();
   const {clicked,setClicked} = useSelection();
+  const [isOpen,setIsOpen] = useState(false);
   const handleClick = () => {
     if (activeUser.user_id) {
       navigate('/searchPage', { state: { userId: activeUser.user_id } });
@@ -30,13 +32,13 @@ const UserProfileSearch = ({ activeUser, setActiveUser }) => {
           <button onClick={handleClick} className="p-6 text-1.5xl text-[#363643]">⌕Search</button>
         </div>
       </div>
-      <div className='Card-Limit-Reached w-56 p-6 m-5 border-2 border-pink-500 rounded-md'>
-         <p>Reached Card Limit</p>
-         <p>Upgrade to access all saved cards.</p>
-         <button>Upgrade</button>
-         <button className='mb-20'>Learn More</button>
+      <div className='Card-Limit-Reached w-56 p-5 m-5 border-2 border-pink-500 rounded-lg'>
+         <p className='text-[#F65077] '>Reached Card Limit</p>
+         <p className='mt-3 text-[#363643]'>Upgrade to access all saved cards.</p>
+         <hr className='bg-[#F65077] h-2 w-full rounded-full'></hr>
+         <p className='mt-4 text-center bg-[#F65077] text-[#FFFFFF] rounded-lg'>🚀 Upgrade</p>
+         <button className='mt-2 ml-10 text-center text-[#F65077] cursor-pointer' onClick={()=> setIsOpen(true)}>Learn More</button>
       </div>
-   #demo
       <div className="flex flex-col text-[#363643] text-lg gap-3 border "> {/* Adds spacing */}
          <div className='flex flex-cols pt-2 pl-3'>
          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="chakra-icon css-1uje9ol" focusable="false"><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"></path></svg>
@@ -71,8 +73,32 @@ const UserProfileSearch = ({ activeUser, setActiveUser }) => {
         <button className="text-[#363643] pl-2 hover:text-pink-500">Organization Settings</button>
         </div>
       </div>
+      {/* modal view */}
+                {isOpen && (
+  <div className="fixed inset-0 flex  flex-col-2 flex-row-2 items-center justify-center bg-black bg-opacity-50 z-50 h-full w-full">
+    <div className="bg-[#250829] p-6 shadow-lg w-[50%] h-[45%] flex">
+        <div className=' w-[70%]'>
+          <h1 className='mt-5 text-[20px] text-[#b3b0b0] text-center'>! Reached card limit</h1>
+          <h1 className='mt-5 text-[#b3b0b0] text-[20px] pl-4'>You've reached your saved card limit. Upgrade to save more cards.</h1>
+          <h1 className='mt-5 text-[#b3b0b0] text-[18px] pl-4'>Upgrade your plan to remove limits and unlock all productivity features.</h1>
+          <button className='text-[#b3b0b0] w-full mt-10 border-2  hover:shadow-sm transition-all duration-75' onClick={()=> setIsOpen(false)}>Close</button>
+        </div>
+        <div className=' w-[30%] text-[#b3b0b0]'>
+          <button className='mb-4 pl-60 w-full ml-auto' onClick={()=>setIsOpen(false)}>X</button>
+          <h1 className='pt-3 pl-10'>✅ Unlimited saved tabs</h1>
+          <h1 className='pt-3 pl-10'>✅ Remove duplicate tabs</h1>
+          <h1 className='pt-3 pl-10'>✅ Priority support</h1>
+          <h1 className='pt-3 pl-10'>✅ Centralized billing</h1>
+          <h1 className='pt-3 pl-10'>✅ Advanced search</h1>
+          <button className='w-full mt-6 hover:border-2 ' > 🚀 Upgrade</button>
+        </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
 
 export default UserProfileSearch;
+

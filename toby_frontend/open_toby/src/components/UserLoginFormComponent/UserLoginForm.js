@@ -19,7 +19,8 @@ const UserLoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3001/api/v1/login", {
+      const serverHost = process.env.REACT_APP_SERVER_HOST;
+      const response = await axios.post(`http://${process.env.REACT_APP_SERVER_HOST}:3001/api/v1/login`, {
         email: formData.email,
         password: formData.password
       });

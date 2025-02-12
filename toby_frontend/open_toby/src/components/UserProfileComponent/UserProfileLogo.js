@@ -22,10 +22,11 @@ const UserProfileLogo = ({userData,onUserSelect,setActiveUser,activeUser}) =>{
         event.preventDefault();
         console.log("Userid",user_id);
         try{
-          await axios.delete(`http://localhost:3001/api/v1/users/${user_id}`);
+          const serverHost = process.env.REACT_APP_SERVER_HOST;
+          await axios.delete(`http://${process.env.REACT_APP_SERVER_HOST}:3001/api/v1/users/${user_id}`);
           console.log("Data Deleted in Users Table");
           try{
-             await axios.delete(`http://localhost:3001/toby_users/${user_id}`)
+             await axios.delete(`http://${process.env.REACT_APP_SERVER_HOST}:3001/toby_users/${user_id}`)
              setTobyUsers((prevUsers)=>
                    prevUsers.filter((user)=> user.user_id !== user_id)
             )
@@ -73,6 +74,10 @@ const UserProfileLogo = ({userData,onUserSelect,setActiveUser,activeUser}) =>{
               }
    },[userId])
 
+   const handleOpenUpdate = async()=>{
+    console.log("Oh My God Bhai");
+    window.postMessage({ type: "Irungha Bhai" }, "*");
+    }
    return(
    <div className='flex flex-col  justify-between h-screen'>
     <div >
@@ -114,7 +119,7 @@ const UserProfileLogo = ({userData,onUserSelect,setActiveUser,activeUser}) =>{
     <div className=''>
     <div className="text-center ">
       <h1 className='text-3xl text-[#b5b2aa]'>?</h1>
-      <h1 className="text-[#363643]">FAQ</h1>
+      <button onClick={()=> handleOpenUpdate()}className="text-[#363643]">FAQ</button>
     </div>
 
     <div className="text-center mt-4">

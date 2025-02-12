@@ -32,7 +32,8 @@ const SearchPageComponent = ({ activeUser, setActiveUser }) => {
     const fetchAllCollections = async () => {
       if (!userId) return;
       try {
-        const response = await axios.get("http://localhost:3001/api/v1/collections", {
+        const serverHost = process.env.REACT_APP_SERVER_HOST;
+        const response = await axios.get(`http://${process.env.REACT_APP_SERVER_HOST}:3001/api/v1/collections`, {
           params: { user_id: userId },
         });
         setUserCollections(response.data.collections);
@@ -50,8 +51,9 @@ const SearchPageComponent = ({ activeUser, setActiveUser }) => {
       const allTabs = [];
       for (const collection of userCollections) {
         try {
+          const serverHost = process.env.REACT_APP_SERVER_HOST;
           const response = await axios.get(
-            `http://localhost:3001/api/v1/collections/${collection.id}/bookmarks`
+            `http://${process.env.REACT_APP_SERVER_HOST}:3001/api/v1/collections/${collection.id}/bookmarks`
           );
           allTabs.push(...response.data.bookmarks);
         } catch (error) {

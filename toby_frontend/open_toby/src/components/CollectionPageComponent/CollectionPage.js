@@ -3,12 +3,13 @@ import axios from 'axios';
 import React, { useState, useEffect, useContext, cloneElement } from 'react';
 import CollectionList from './CollectionList';
 const CollectionsPage = ({activeUser}) => {
+    const serverHost = process.env.REACT_APP_SERVER_HOST;
     const user_id = activeUser.user_id;
     const [collections,setCollections] = useState([]);
     useEffect(()=>{
         const fetchCollections = async() =>{
                try{
-                   const collection_response = await axios.get("http://localhost:3001/api/v1/collections",{
+                   const collection_response = await axios.get(`http://${process.env.REACT_APP_SERVER_HOST}:3001/api/v1/collections`,{
                     params:{
                         user_id: activeUser.user_id
                     }

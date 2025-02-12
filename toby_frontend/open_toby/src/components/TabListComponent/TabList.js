@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 const MyComponent= ({activeUser,setActiveUser,onUserSelect}) => {
+  const serverHost = process.env.REACT_APP_SERVER_HOST;
   const [storedData, setStoredData] = useState({});
   const user_id = activeUser.user_id;
   const [dropDownResult,setDropDownReuslt] = useState({});
@@ -64,7 +65,7 @@ const MyComponent= ({activeUser,setActiveUser,onUserSelect}) => {
     };
 
     try{
-      const response = await axios.post('http://localhost:3001/api/v1/collections', payload);
+      const response = await axios.post(`http://${process.env.REACT_APP_SERVER_HOST}:3001/api/v1/collections`, payload);
       if(response.data && response.data.collection){
         const new_collection = response.data.collection;
         // setCollections((prev_collections)=>[new_collection,...prev_collections]);

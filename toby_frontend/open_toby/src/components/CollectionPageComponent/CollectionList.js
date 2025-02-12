@@ -13,6 +13,7 @@ const CollectionList = ({
   userData,
   activeUser,
 }) => {
+  const serverHost = process.env.REACT_APP_SERVER_HOST;
   const {clicked,setClicked} = useSelection();
   const collectionRefs = useRef({});
   const user_id = activeUser.user_id;
@@ -91,7 +92,7 @@ const CollectionList = ({
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3001/api/v1/collections",
+        `http://${process.env.REACT_APP_SERVER_HOST}:3001/api/v1/collections`,
         {
           collection: {
             title: collectionTitle,
@@ -113,7 +114,7 @@ const CollectionList = ({
   const handleDelete = async (collection_id) => {
     try {
       await axios.delete(
-        `http://localhost:3001/api/v1/collections/${collection_id}`
+        `http://${process.env.REACT_APP_SERVER_HOST}:3001/api/v1/collections/${collection_id}`
       );
       setCollections((prevCollections) =>
         prevCollections.filter((collection) => collection.id !== collection_id)
@@ -136,7 +137,7 @@ const CollectionList = ({
     event.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:3001/api/v1/collections/${collection_id}`,
+        `http://${process.env.REACT_APP_SERVER_HOST}:3001/api/v1/collections/${collection_id}`,
         {
           collection: {
             title: editTitle,
@@ -165,7 +166,7 @@ const CollectionList = ({
   const handleGetAllTabs = async (collection_id, message) => {
     try {
       const response = await axios.get(
-        `http://localhost:3001/api/v1/collections/${collection_id}/bookmarks`
+        `http://${process.env.REACT_APP_SERVER_HOST}:3001/api/v1/collections/${collection_id}/bookmarks`
       );
       const urls = [];
       response.data.bookmarks.map((tabs) => {
@@ -217,7 +218,7 @@ const CollectionList = ({
     console.log("Hey Miss Amingo");
     console.log(stared_collection);
     try{
-     const response= await axios.post("http://localhost:3001/api/v1/stared",{
+     const response= await axios.post(`http://${process.env.REACT_APP_SERVER_HOST}:3001/api/v1/stared`,{
       'collection_id': stared_collection.id
      });
      setClicked(1);
